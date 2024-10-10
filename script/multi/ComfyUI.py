@@ -8,7 +8,7 @@ from nenen88 import pull, say, download, clone, tempe
 repo = f"git clone -q https://github.com/comfyanonymous/ComfyUI"
 
 HOME = Path.home()
-SRC = HOME / '.ositoMalvado'
+SRC = HOME / '.sksd'
 CSS = SRC / 'setup.css'
 IMG = SRC / 'loading.png'
 MARK = SRC / 'marking.py'
@@ -77,7 +77,7 @@ def webui_req():
     tempe()
 
 def install_custom_nodes():
-    say("<br><b>【{red} Instalando Custom Nodes{d} 】{red}</b>")
+    say("<br><b>【{red} Installing Custom Nodes{d} 】{red}</b>")
 
     os.chdir(WEBUI / "custom_nodes")
     clone(str(WEBUI / "asd/custom_nodes.txt"))
@@ -155,7 +155,7 @@ def webui_install(b):
         display(Image(filename=str(IMG)))
 
     with webui_setup:
-        say("<b>【{red} Instalando ComfyUI{d} 】{red}</b>")
+        say("<b>【{red} Installing ComfyUI{d} 】{red}</b>")
         get_ipython().system(f"{repo}")
 
         marking(SRC, 'marking.json', 'ComfyUI')
@@ -172,7 +172,7 @@ def webui_install(b):
             get_ipython().run_line_magic('run', f'{WEBUI}/venv.py')
             os.chdir(HOME)
             loading.clear_output(wait=True)
-            say("<b>【{red} Listo{d} 】{red}</b>")
+            say("<b>【{red} Done{d} 】{red}</b>")
 
 def go_back(b):
     panel.close()

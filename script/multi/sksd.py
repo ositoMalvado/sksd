@@ -1,29 +1,56 @@
-from IPython.display import display, HTML, clear_output
+from IPython.display import display, HTML, clear_output, Image
 from multiprocessing import Process, Condition, Value
 from IPython import get_ipython
 from ipywidgets import widgets
 from pathlib import Path
 import json, argparse, sys, logging
 
-src = Path.home() / '.osito1'
-css_setup = src / 'setup.css'
-mark = src / 'marking.json'
+SRC = Path.home() / '.sksd'
+CSS = SRC / 'setup.css'
+MARK = SRC / 'marking.json'
+IMG = SRC / "loading.png"
 
 py = '/tmp/venv/bin/python3'
 
 def get_args(ui):
-    if ui == 'A1111':
-        return '--xformers --enable-insecure-extension-access --disable-console-progressbars --theme dark'
+    args_line = {
+        'A1111': (
+            '--xformers '
+            '--enable-insecure-extension-access '
+            '--disable-console-progressbars '
+            '--theme dark'
+        ),
+        'Forge': (
+            '--disable-xformers '
+            '--opt-sdp-attention '
+            '--cuda-stream '
+            '--pin-shared-memory '
+            '--enable-insecure-extension-access '
+            '--disable-console-progressbars '
+            '--theme dark'
+        ),
+        'ComfyUI': (
+            '--dont-print-server '
+            '--preview-method auto '
+            '--use-pytorch-cross-attention'
+        ),
+        'ReForge': (
+            '--xformers '
+            '--cuda-stream '
+            '--pin-shared-memory '
+            '--enable-insecure-extension-access '
+            '--disable-console-progressbars '
+            '--theme dark'
+        ),
+        'FaceFusion': '',
+        'SDTrainer': ''
+    }
 
-    elif ui == 'Forge':
-        return '--disable-xformers --opt-sdp-attention --cuda-stream --pin-shared-memory --enable-insecure-extension-access --disable-console-progressbars --theme dark'
-
-    elif ui == 'ComfyUI':
-        return '--dont-print-server --preview-method auto --use-pytorch-cross-attention'
+    return args_line.get(ui, '')
 
 def load_config():
     global ui
-    config = json.load(mark.open('r')) if mark.exists() else {}
+    config = json.load(MARK.open('r')) if MARK.exists() else {}
 
     ui = config.get('ui', None)
     zrok_token.value = config.get('zrok_token', '')
@@ -49,11 +76,17 @@ def load_config():
         title.value = '<div class="title"><h1>Forge</h1></div>'
     elif ui == 'ComfyUI':
         title.value = '<div class="title"><h1>ComfyUI</h1></div>'
+    elif ui == 'ReForge':
+        title.value = '<div class="title"><h1>ReForge</h1></div>'
+    elif ui == 'FaceFusion':
+        title.value = '<div class="title"><h1>Face Fusion</h1></div>'
+    elif ui == 'SDTrainer':
+        title.value = '<div class="title"><h1>SD Trainer</h1></div>'
 
 def save_config(zrok_token, ngrok_token, args1, args2, tunnel):
     config = {}
-    if mark.exists():
-        with mark.open('r') as file:
+    if MARK.exists():
+        with MARK.open('r') as file:
             config = json.load(file)
 
     config.update({
@@ -64,21 +97,21 @@ def save_config(zrok_token, ngrok_token, args1, args2, tunnel):
         "tunnel": tunnel
     })
 
-    with mark.open('w') as file:
+    with MARK.open('w') as file:
         json.dump(config, file, indent=4)
 
 def load_css():
-    with open(css_setup, "r") as file:
+    with open(CSS, "r") as file:
         data = file.read()
 
     display(HTML(f"<style>{data}</style>"))
 
 title = widgets.HTML()
-zrok_token = widgets.Text(placeholder='Tu token ZROK')
-ngrok_token = widgets.Text(placeholder='Tu token NGROK')
+zrok_token = widgets.Text(placeholder='Your ZROK Token')
+ngrok_token = widgets.Text(placeholder='Your NGROK Token')
 
-launch_args1 = widgets.Text(placeholder='Lista de argumentos')
-launch_args2 = widgets.Text(placeholder='Agrega argumentos a la lista aquí')
+launch_args1 = widgets.Text(placeholder='Launch Arguments List')
+launch_args2 = widgets.Text(placeholder='Add Launch Arguments List here')
 args_box = widgets.VBox([launch_args1, launch_args2], layout=widgets.Layout(
     display='flex',
     flex_flow='column',
@@ -96,7 +129,7 @@ top = widgets.HBox([tunnel, title], layout=widgets.Layout(
     flex_flow='row',
     justify_content='space-between'))
 
-launch_button = widgets.Button(description='Go')
+launch_button = widgets.Button(description='Launch')
 exit_button = widgets.Button(description='Exit')
 button_box = widgets.HBox([launch_button, exit_button], layout=widgets.Layout(
     display='flex',
@@ -169,64 +202,110 @@ def import_cupang():
 
 def launching(ui, skip_comfyui_check=False):
     import_cupang()
-
     args = f'{launch_args1.value} {launch_args2.value}'
     get_ipython().run_line_magic('run', 'venv.py')
 
-    if ui in ['A1111', 'Forge', 'ComfyUI']:
+    log_file = Path('sksd.log')
+    logging.basicConfig(
+        filename=log_file,
+        level=logging.INFO,
+        format="{message}", style="{"
+    )
+
+    if ui in ['A1111', 'Forge', 'ComfyUI', 'ReForge']:
+        log_msg = 'comfyui' if ui == 'ComfyUI' else 'A1111/Forge'
+        log_file.write_text(log_msg + '\n')
+        port = 8188 if ui == 'ComfyUI' else 7860
+        
         if ui == 'ComfyUI' and not skip_comfyui_check:
             get_ipython().system(f'{py} apotek.py')
             clear_output(wait=True)
 
-        log_file = Path('sdsk.log')
-        log_file.write_text('comfyui\n') if ui == 'ComfyUI' else log_file.write_text('A1111/Forge\n')
-        logging.basicConfig(
-            filename=log_file,
-            level=logging.INFO,
-            format="{message}", style="{"
-        )
+        tunnel_list, cmd = tunnel_cmd(tunnel.value, port, args, ui, FF=False, SDT=False)
 
-        port = 8188 if ui == 'ComfyUI' else 7860
+    elif ui == 'FaceFusion':
+        log_file.write_text('Face-Fusion\n')
+        port = 7860
+        tunnel_list, cmd = tunnel_cmd(tunnel.value, port, args, ui, FF=True, SDT=False)
 
+    elif ui == 'SDTrainer':
+        log_file.write_text('SD-Trainer\n')
+        port = 28000
+        tunnel_list, cmd = tunnel_cmd(tunnel.value, port, args, ui, FF=False, SDT=True)
+
+    if cmd:        
+        if tunnel.value == 'NGROK':
+            get_ipython().system(cmd)
+        else:
+            configs = tunnel_configs(tunnel.value, port)
+            run_tunnel(cmd, configs, port)
+
+def tunnel_cmd(tunnel_value, port, args, ui, FF, SDT):
+    global py
+    if FF:
+        display(Image(filename=str(IMG)))
+        clear_output(wait=True)
+        py = '/tmp/venv-fusion/bin/python3'
+        tunnel_list = {
+            'Pinggy': f'{py} launch.py {args}',
+            'ZROK': f'{py} launch.py {args}',
+            'NGROK': f'{py} launch.py {args}'
+        }
+    elif SDT:
+        py = 'HF_HOME=huggingface /tmp/venv-sd-trainer/bin/python3'
+        tunnel_list = {
+            'Pinggy': f'{py} launch.py {args}',
+            'ZROK': f'{py} launch.py {args}',
+            'NGROK': f'{py} launch.py {args}'
+        }
+    elif ui == 'ComfyUI':
+        tunnel_list = {
+            'Pinggy': f'{py} launch.py {args}',
+            'ZROK': f'{py} launch.py {args}',
+            'NGROK': f'{py} launch.py {args}'
+        }
+    else:
         tunnel_list = {
             'Pinggy': f'{py} pinggy.py {args}',
             'ZROK': f'{py} zrok.py {args}',
             'NGROK': f'{py} ngrokk.py {ngrok_token.value} {args}'
         }
 
-        config_list = {
-            'Pinggy': {
-                'command': f"ssh -o StrictHostKeyChecking=no -p 80 -R0:localhost:{port} a.pinggy.io",
-                'name': "PINGGY",
-                'pattern': r"https://[\w-]+\.a\.free\.pinggy\.link"
-            },
-            'ZROK': {
-                'command': f"zrok share public localhost:{port} --headless",
-                'name': "ZROK",
-                'pattern': r"https://[\w-]+\.share\.zrok\.io"
-            }
+    return tunnel_list, tunnel_list.get(tunnel_value)
+
+def tunnel_configs(tunnel_value, port):
+    config_list = {
+        'Pinggy': {
+            'command': f"ssh -o StrictHostKeyChecking=no -p 80 -R0:localhost:{port} a.pinggy.io",
+            'name': "PINGGY",
+            'pattern': r"https://[\w-]+\.a\.free\.pinggy\.link"
+        },
+        'ZROK': {
+            'command': f"zrok share public localhost:{port} --headless",
+            'name': "ZROK",
+            'pattern': r"https://[\w-]+\.share\.zrok\.io"
         }
+    }
 
-        cmd = tunnel_list.get(tunnel.value)
-        configs = config_list.get(tunnel.value)
+    return config_list.get(tunnel_value)
 
-        if cmd:
-            if tunnel.value == 'NGROK':
-                get_ipython().system(cmd)
+def run_tunnel(cmd, configs, port):
+    try:
+        from cupang import Tunnel as Alice_Zuberg
 
-            else:
-                from cupang import Tunnel as Alice_Zuberg
+        if tunnel.value == 'ZROK':
+            zrok_enable()
 
-                if tunnel.value == 'ZROK':
-                    zrok_enable()
+        Alice_Synthesis_Thirty = Alice_Zuberg(port)
+        Alice_Synthesis_Thirty.logger.setLevel(logging.DEBUG)
+        Alice_Synthesis_Thirty.add_tunnel(command=configs['command'], name=configs['name'], pattern=configs['pattern'])
+        Alice_Synthesis_Thirty.check_local_port = False
 
-                Alice_Synthesis_Thirty = Alice_Zuberg(port)
-                Alice_Synthesis_Thirty.logger.setLevel(logging.DEBUG)
-                Alice_Synthesis_Thirty.add_tunnel(command=configs['command'], name=configs['name'], pattern=configs['pattern'])
-                Alice_Synthesis_Thirty.check_local_port=False
+        with Alice_Synthesis_Thirty:
+            get_ipython().system(cmd)
 
-                with Alice_Synthesis_Thirty:
-                    get_ipython().system(cmd)
+    except KeyboardInterrupt:
+        pass
 
 def waiting(condition, is_ready):
     with condition:
@@ -267,9 +346,11 @@ if __name__ == '__main__':
         if args.skip_widget:
             load_config()
             launching(ui, skip_comfyui_check=args.skip_comfyui_check)
+
         else:
             display_widgets()
             p = Process(target=waiting, args=(condition, is_ready))
             p.start()
+
     except KeyboardInterrupt:
         pass

@@ -1,6 +1,6 @@
 asd = (
-    'Obsoleto...\nUsa el multi-notebook llamado sksd.ipynb en cambio.'
+    'Discontinued...\nGet the multi-notebook named Segsmaker.ipynb instead.'
     '\nhttps://github.com/ositoMalvado/sksd'
 )
-#skeletor
+
 print(asd)

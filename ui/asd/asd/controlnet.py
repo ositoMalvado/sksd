@@ -1,6 +1,6 @@
 import ipywidgets as widgets
 from IPython.display import display, HTML, clear_output
-from ositoMalvado import download
+from gutris1 import download
 
 bura = "/home/studio-lab-user/asd/asd/controlnet.css"
 with open(bura, "r") as oppai:
@@ -108,11 +108,11 @@ def usa_cb(b):
     for checkbox in cb1.children + cb2.children:
         checkbox.value = False
         
-sab = widgets.Button(description="Seleccionar Todo")
+sab = widgets.Button(description="Select All")
 sab.add_class("select-all-button")
 sab.on_click(sa_cb)
 
-usab = widgets.Button(description="Deseleccionar Todo")
+usab = widgets.Button(description="Unselect All")
 usab.add_class("unselect-all-button")
 usab.on_click(usa_cb)
 

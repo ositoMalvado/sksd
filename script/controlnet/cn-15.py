@@ -8,7 +8,7 @@ src_cn = Path(__file__).parent
 css_cn = src_cn / "cn.css"
 tmplora = '/tmp/lora'
 tmpcn = '/tmp/controlnet'
-img = Path.home() / ".ositoMalvado/loading.png"
+img = Path.home() / ".sksd/loading.png"
     
 controlnet_list = {
     "Openpose": [
@@ -104,8 +104,8 @@ checkbox_layout = widgets.HBox(
 
 download_button = widgets.Button(description="Download", layout=widgets.Layout(width='130px', left='110px'))
 
-select_all_button = widgets.Button(description="Seleccionar Todo", layout=widgets.Layout(width='130px', left='15px'))
-unselect_all_button = widgets.Button(description="Deseleccionar Todo", layout=widgets.Layout(width='130px', left='20px'))
+select_all_button = widgets.Button(description="Select All", layout=widgets.Layout(width='130px', left='15px'))
+unselect_all_button = widgets.Button(description="Unselect All", layout=widgets.Layout(width='130px', left='20px'))
 bottom_box = widgets.Button(description="", disabled=True)
 
 button_layout = widgets.HBox([select_all_button, unselect_all_button, download_button, bottom_box])
@@ -161,7 +161,7 @@ def downloading(b):
             download(url)
 
         loading.clear_output()
-        say("【{red} Listo{d} 】{red}")
+        say("【{red} Done{d} 】{red}")
         get_ipython().run_line_magic('cd', '-q ~')
 
 tempe()

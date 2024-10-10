@@ -8,7 +8,7 @@ from nenen88 import say, download, tempe
 repo = f"git clone --recurse-submodules https://github.com/Akegarasu/lora-scripts SDTrainer"
 
 HOME = Path.home()
-SRC = HOME / '.ositoMalvado'
+SRC = HOME / '.sksd'
 CSS = SRC / 'setup.css'
 IMG = SRC / 'loading.png'
 MARK = SRC / 'marking.py'
@@ -85,7 +85,7 @@ def webui_install():
         display(Image(filename=str(IMG)))
 
     with webui_setup:
-        say("<b>【{red} Instalando SD Trainer{d} 】{red}</b>")
+        say("<b>【{red} Installing SD Trainer{d} 】{red}</b>")
         get_ipython().system(f"{repo}")
 
         marking(SRC, 'marking.json', 'SDTrainer')
@@ -97,7 +97,7 @@ def webui_install():
             get_ipython().run_line_magic('run', f'{WEBUI}/venv.py')
             os.chdir(HOME)
             loading.clear_output(wait=True)
-            say("<b>【{red} Listo{d} 】{red}</b>")
+            say("<b>【{red} Done{d} 】{red}</b>")
 
 loading = widgets.Output()
 webui_setup = widgets.Output()

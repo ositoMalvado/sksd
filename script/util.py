@@ -9,7 +9,7 @@ import subprocess, time, zipfile, sys, os, json, psutil
 
 
 home = Path.home()
-src_src = home / '.ositoMalvado'
+src_src = home / '.sksd'
 css = src_src / "pantat88.css"
 img = src_src / "loading.png"
 startup = home / ".ipython/profile_default/startup"
@@ -89,7 +89,7 @@ def storage(line):
 def delete_everything(line):    
     main_output = widgets.Output()
     
-    ask = widgets.Label("Borrar Todo??")
+    ask = widgets.Label("Delete Everything?")
     ask.add_class("del")
 
     yes = widgets.Button(description="Yes")
@@ -312,13 +312,13 @@ def change_key(line):
     key_file = src_src / "api-key.json"
 
     main_output = widgets.Output()
-    save_button = widgets.Button(description="Guardar")
+    save_button = widgets.Button(description="Save")
     save_button.add_class("save")
 
     cancel_button = widgets.Button(description="Cancel")
     cancel_button.add_class("cancel")
 
-    new_key = widgets.Text(placeholder='Ingresa Tu Nueva Civitai API KEY')
+    new_key = widgets.Text(placeholder='Enter Your New Civitai API KEY')
     new_key.add_class("key-input")
 
     current_key = widgets.Text(placeholder='', disabled=True)
@@ -401,7 +401,7 @@ def change_key(line):
 
                 main_output.clear_output(wait=True)
                 time.sleep(3)
-                say("Listo")
+                say("Done")
 
         def cancel_key(b):
             new_key.value = ''
@@ -442,7 +442,7 @@ def zrok_register(line):
     exit_button = widgets.Button(description="Exit", layout=widgets.Layout(left= '45%'))
     exit_button.add_class("zrok-btn")
 
-    email_input = widgets.Text(placeholder='Ingresa Tu Tu Correo', layout=widgets.Layout(width= '75%'))
+    email_input = widgets.Text(placeholder='Enter Your Valid Email Address', layout=widgets.Layout(width= '75%'))
     email_input.add_class("email-input")
 
     zrok_button = widgets.HBox([register_button, exit_button], layout=widgets.Layout(

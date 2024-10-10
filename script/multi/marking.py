@@ -5,7 +5,7 @@ from nenen88 import tempe
 import json
 
 HOME = Path.home()
-SRC = HOME / '.ositoMalvado'
+SRC = HOME / '.sksd'
 marked = SRC / 'marking.json'
 tmp = Path('/tmp')
 

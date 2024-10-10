@@ -5,7 +5,7 @@ from pathlib import Path
 import os
 
 HOME = Path.home()
-SRC = HOME / '.ositoMalvado'
+SRC = HOME / '.sksd'
 CSS = SRC / 'setup.css'
 MARK = SRC / 'marking.py'
 IMG = SRC / 'loading.png'

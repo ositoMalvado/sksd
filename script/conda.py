@@ -5,7 +5,7 @@ from pathlib import Path
 import subprocess, json, shlex
 
 home = Path.home()
-src = home / ".ositoMalvado"
+src = home / ".sksd"
 css = src / "pantat88.css"
 startup = home / ".ipython/profile_default/startup"
 nenen = startup / "nenen88.py"
@@ -39,10 +39,10 @@ for items in scripts:
 
 main_output = widgets.Output()
 
-save_button = widgets.Button(description="Guardar")
+save_button = widgets.Button(description="Save")
 save_button.add_class("save-button")
 
-civitai_key_box = widgets.Text(placeholder='Ingresa Tu Civitai API KEY Aqui', layout=widgets.Layout(width='350px'))
+civitai_key_box = widgets.Text(placeholder='Enter Your Civitai API KEY Here', layout=widgets.Layout(width='350px'))
 civitai_key_box.add_class("api-input")
 
 input_widget = widgets.Box(
@@ -75,10 +75,10 @@ def conda_install():
 
         cmd_list = [
             (f'rm -rf {home}/.condarc', None),
-            ('conda install --repodata-fn repodata.json -qyc conda-forge conda', f'{BLUE} Instalando Anaconda'),
-            ('conda install --repodata-fn repodata.json -qyc conda-forge python=3.10.13', f'{CYAN} Instalando Python 3.10.13'),
-            ('conda install -qyc conda-forge glib gperftools openssh pv', f'{PURPLE} Instalando Conda Packages'),
-            ('pip install -q psutil aria2 gdown', f'{PINK} Instalando Python Packages'),
+            ('conda install --repodata-fn repodata.json -qyc conda-forge conda', f'{BLUE} Installing Anaconda'),
+            ('conda install --repodata-fn repodata.json -qyc conda-forge python=3.10.13', f'{CYAN} Installing Python 3.10.13'),
+            ('conda install -qyc conda-forge glib gperftools openssh pv', f'{PURPLE} Installing Conda Packages'),
+            ('pip install -q psutil aria2 gdown', f'{PINK} Installing Python Packages'),
             ('conda clean -qy --all', None),
             (f'rm -rf {home}/.cache/*', None)
         ]
@@ -91,7 +91,7 @@ def conda_install():
         zrok_install()
 
         clear_output()
-        print(f"{GREEN} Listo")
+        print(f"{GREEN} Done")
 
         get_ipython().kernel.do_shutdown(True)
 

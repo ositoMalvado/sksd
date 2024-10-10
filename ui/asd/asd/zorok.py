@@ -9,7 +9,7 @@ def zzz():
         subprocess.run(["tar", "-xzf", "zrok_0.4.23_linux_amd64.tar.gz", "-C", zorok, "--wildcards", "*zrok"], check=True)
         os.remove("zrok_0.4.23_linux_amd64.tar.gz")
         print("""
-Now, register your ZROK.
+Now, register your ZROK account.
 Copy and Paste this command
 ~/.zrok/bin/zrok invite
 into Terminal

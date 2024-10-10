@@ -5,7 +5,7 @@ import subprocess, os, shlex, json
 from nenen88 import tempe, say, download
 
 HOME = Path.home()
-SRC = HOME / '.ositoMalvado'
+SRC = HOME / '.sksd'
 MARK = SRC / 'marking.json'
 IMG = SRC / 'loading.png'
 
@@ -110,7 +110,7 @@ def venv_install(ui, url, need_space, fn):
                 req_space -= removing(tmp / 'controlnet', req_space)
 
         os.chdir(tmp)
-        say('<br>【{red} Instalando VENV{d} 】{red}')
+        say('<br>【{red} Installing VENV{d} 】{red}')
         download(url)
         get_ipython().system(f'pv {fn} | lz4 -d | tar xf -')
         Path(fn).unlink()
