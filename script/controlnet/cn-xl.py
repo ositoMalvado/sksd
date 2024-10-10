@@ -183,7 +183,7 @@ def downloading(b):
             download(url)
 
         loading.clear_output()
-        say("【{red} Done{d} 】{red}")
+        say("【{red} Listo, si pide reiniciar ignoralo.{d} 】{red}")
         get_ipython().run_line_magic('cd', '-q ~')
 
 tempe()

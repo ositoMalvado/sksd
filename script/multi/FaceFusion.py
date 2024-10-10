@@ -110,7 +110,7 @@ def webui_install():
             get_ipython().run_line_magic('run', f'{WEBUI}/venv.py')
             os.chdir(HOME)
             loading.clear_output(wait=True)
-            say("<b>【{red} Done{d} 】{red}</b>")
+            say("<b>【{red} Listo, si pide reiniciar ignoralo.{d} 】{red}</b>")
 
 loading = widgets.Output()
 webui_setup = widgets.Output()

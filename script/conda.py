@@ -39,10 +39,10 @@ for items in scripts:
 
 main_output = widgets.Output()
 
-save_button = widgets.Button(description="Save")
+save_button = widgets.Button(description="Guardar")
 save_button.add_class("save-button")
 
-civitai_key_box = widgets.Text(placeholder='Enter Your Civitai API KEY Here', layout=widgets.Layout(width='350px'))
+civitai_key_box = widgets.Text(placeholder='Ingresa Tu Civitai API KEY Here', layout=widgets.Layout(width='350px'))
 civitai_key_box.add_class("api-input")
 
 input_widget = widgets.Box(
@@ -91,7 +91,7 @@ def conda_install():
         zrok_install()
 
         clear_output()
-        print(f"{GREEN} Done")
+        print(f"{GREEN} Listo, si pide reiniciar ignoralo.")
 
         get_ipython().kernel.do_shutdown(True)
 
