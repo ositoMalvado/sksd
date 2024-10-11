@@ -1,119 +1,53 @@
-# Stable Diffusion Webui, Forge and ComfyUI notebook<br />for SageMaker Studio Lab
-[<img src="https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Fgithub.com%2Fpantat88%2Fsegsmaker&label=Visitors&countColor=%232ccce4&style=flat">](https://visitorbadge.io/status?path=https%3A%2F%2Fgithub.com%2Fpantat88%2Fsegsmaker)<br>[<img src="https://img.shields.io/badge/Support%20me%20on%20Ko--fi-F16061?logo=ko-fi&logoColor=white&style=flat">](https://ko-fi.com/gutris1)
+[![Abrir en SageMaker](https://lithi.io/file/GU9fQbpp.svg)](https://studiolab.sagemaker.aws/import/github/ositoMalvado/sksd/blob/main/sksd.ipynb)
 
-| Segsmaker.ipynb | [![Open in Studio Lab](https://studiolab.sagemaker.aws/studiolab.svg)](https://studiolab.sagemaker.aws/import/github/ositoMalvado/sksd/blob/main/Segsmaker.ipynb) |
-| :---------------------------------------- | :-----------------------------------------------------------------------------------------------------------------: |
-<br />
+Mi Discord: https://discord.gg/BQKEQaGj
 
-you can find me here https://discord.gg/k5BwmmvJJU <br /><br />
-![image](https://github.com/ositoMalvado/sksd/assets/132797949/670da491-58f7-4fc0-b5ef-b2cde93f79bf)
+# 🐴 Cuaderno de Stable Diffusion
 
+Este cuaderno está diseñado para guiarte en la instalación y configuración de Stable Diffusion en diferentes plataformas (A1111, Forge, ComfyUI) dentro de SageMaker.
 
-# Changelog
-### 2024-10-05
-- <code>[SD-Trainer](https://github.com/Akegarasu/lora-scripts)</code> webui added.<br>
+## ☢️ Advertencias Importantes
 
-![Screenshot_1](https://github.com/user-attachments/assets/055a5391-834f-4343-b0af-3c180df480dd)
+- **Ejecuta la celda "Borrar todo" antes de comenzar cualquier otra operación. También puedes usar en la terminal el comando ```rm -rf ~```**
+- **Ten a mano tu API KEY de Civitai para las configuraciones necesarias.**
 
+## 🟢 Instalación del Entorno
 
-<details><summary>2024-10-01</summary><br>
+Primero, asegúrate de instalar el entorno correcto que incluye todas las dependencias necesarias. Una vez hecho esto, SageMaker conservará la instalación. Para asegurarte ejecuta esta celda 2 veces.
 
-- ReForge and Face Fusion webui Added.
+## 🦀 Instalación de Stable Diffusion
 
-![Screenshot_1](https://github.com/user-attachments/assets/869d4277-da52-46f4-a53e-ba530a7a1df3)
-</details>
+Después de configurar el entorno, instala Stable Diffusion en la plataforma que prefieras (A1111, Forge o ComfyUI). Si decides cambiar de plataforma más adelante, deberás ejecutar la celda para eliminar la WebUI previamente instalada.
 
-<details><summary>2024-07-25</summary><br>
+## 🐋 Descarga de Extensiones, Nodos, VAEs y Embeddings
 
-- Notebooks combined.
-</details>
+El cuaderno proporciona comandos para descargar y gestionar extensiones, nodos personalizados, modelos VAE y embeddings. Sigue la sintaxis indicada en el cuaderno para posicionar los archivos en los directorios correctos.
 
-<details><summary>2024-07-10</summary><br>
+## 🐼 Descarga de Checkpoints y Loras [Permanente]
 
-- added multi Notebook Segsmaker_1+2<br /><br />
-![image](https://github.com/ositoMalvado/sksd/assets/132797949/1a15250b-39ad-483c-9ad2-f92023c8a3c3)
-</details>
+Los modelos descargados en esta sección se almacenarán de manera permanente en SageMaker. Asegúrate de seguir las instrucciones para descargar y organizar los modelos en los directorios adecuados.
 
-<details><summary>2024-06-24</summary><br>
+## 🐉 Descarga de Checkpoints y Loras [Temporal]
 
-- Improved Notebook.
-- Save all your things from there and Please NUKE☢️ your current environment with command below, before using new Notebook with venv.
-```python
-!rm -rf ~
-```
-- Old Notebooks won't work anymore.
-- PINGGY and ZROK URLs will be printed after the local URL.
-</details>
+Los modelos descargados en esta sección se eliminarán al reiniciar SageMaker. Puedes descargar hasta 19GB de modelos temporales, siguiendo la misma sintaxis que para los modelos permanentes.
 
-<details><summary>2024-05-29</summary><br>
-  
-- Fixed Conda Installation.
-</details>
+## 🦢 Web UI
 
-<details><summary>2024-05-18</summary><br>
+Este cuaderno te permite lanzar la WebUI para Stable Diffusion con opciones de pre-carga y configuración para ComfyUI. Asegúrate de revisar las opciones disponibles para optimizar tu experiencia.
 
-- Upgraded Torch to version 2.2.0+cu121.
-- Added Pinggy tunnel.
-- Removed Segsmaker animatediff notebook.
-</details>
+## 💎 Extras
 
-<details><summary>2024-04-17</summary><br>
+El cuaderno también incluye funciones adicionales, como:
 
-- Updated AUTO1111 SD Webui to 1.9.3
-- Removed [batchlinks-webui](https://github.com/etherealxx/batchlinks-webui) from pre-install extension list.
-- Removed [Stable-Diffusion-Webui-Civitai-Helper](https://github.com/zixaphir/Stable-Diffusion-Webui-Civitai-Helper) from pre-install extension list.
-- Added [sd-hub](https://github.com/gutris1/sd-hub) to pre-install extension list.
-- Added [sd-civitai-browser-plus](https://github.com/BlafKing/sd-civitai-browser-plus) to pre-install extension list.
-</details>
+- **Registrar cuenta en ZROK**
+- **Cambiar la API KEY de Civitai**
+- **Ver el estado del almacenamiento**
+- **Borrar imágenes generadas**
+- **Desinstalar la Web UI**
+- **Reiniciar el entorno de SageMaker**
 
-<details><summary>2024-03-11</summary><br>
+Además, puedes crear un archivo ZIP con las imágenes generadas directamente desde el cuaderno.
 
-- Minor changes, SDXL notebook removed.
-- Select either SD 1.5 or SDXL for installation in Segsmaker.ipynb and Segsmaker_Forge.ipynb using the widget.
-</details>
+---
 
-<details><summary>2024-03-02</summary><br>
-
-- Add notebook for [SD Forge](https://github.com/lllyasviel/stable-diffusion-webui-forge)
-- Update AUTO1111 SD Webui to 1.8.0.
-- Update Conda script to install Torch 2.1.2+cu121.
-</details>
-
-<details><summary>2024-02-09</summary><br>
-
-- Switch to aria2 for civitai.com downloads.
-- Add gdown for Google Drive downloads. For Google Drive file or folder, simply paste the public URL directly.
-- Else default to Curl.
-
-Usage:
-```python
-# only url
-%download URL
-
-# url and filename
-%download URL 123456.safetensors
-
-# url and path
-%download URL ~/asd/models/asdasd
-
-# url path and filename
-%download URL ~/asd/models/zzzzzz 789789.txt
-```
-</details>
-
-<details><summary>2024-02-07</summary><br>
-
-- For the safety of all of us, especially my account, from now on please enter your own API key by rerunning the Conda cell. <br />
-  <img src="https://github.com/ositoMalvado/sksd/assets/132797949/7420b6ff-7080-46f2-bd20-cd2088d64ff6" width="486" height="169">
-- Get your own API key at https://civitai.com/user/account click the 'Add API Key' button, give it a name and then copy. <br />
-  <img src="https://github.com/ositoMalvado/sksd/assets/132797949/d3fa05b6-4cdd-4ffc-9a50-43bf550de627" width="367" height="169">
-- Don't worry, you only need to do that once. next time you reinstall Conda, you will not be prompted again.
-</details>
-
-# Preview
-<p align="center">
-  <img src="https://github.com/ositoMalvado/sksd/assets/132797949/4ecc8360-a3ba-4564-8acc-64638acb3e35", widht=1000px>
-  <img src="https://github.com/ositoMalvado/sksd/assets/132797949/e19cc982-67ea-447f-a505-4efc932c822a", widht=1000px>
-  <img src="https://github.com/ositoMalvado/sksd/blob/main/pre/fastpnginfo.png", widht=1000px>
-  <img src="https://github.com/ositoMalvado/sksd/blob/main/pre/cn.png", widht=1000px>
-</p>
+Sigue las instrucciones dentro del cuaderno `.ipynb` para ejecutar cada una de estas operaciones de manera segura y eficiente.
