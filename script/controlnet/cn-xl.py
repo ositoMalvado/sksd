@@ -126,8 +126,8 @@ checkbox_layout = widgets.HBox(
     layout=widgets.Layout(top='-40px', align_items='flex-start'))
 
 download_button = widgets.Button(description="Download", layout=widgets.Layout(left='130px'))
-select_all_button = widgets.Button(description="Select All", layout=widgets.Layout(left='30px'))
-unselect_all_button = widgets.Button(description="Unselect All", layout=widgets.Layout(left='35px'))
+select_all_button = widgets.Button(description="Seleccionar Todo", layout=widgets.Layout(left='30px'))
+unselect_all_button = widgets.Button(description="Deseleccionar Todo", layout=widgets.Layout(left='35px'))
 bottom_box = widgets.Button(description="", disabled=True)
 
 button_layout = widgets.HBox([select_all_button, unselect_all_button, download_button, bottom_box])

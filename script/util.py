@@ -89,7 +89,7 @@ def storage(line):
 def delete_everything(line):    
     main_output = widgets.Output()
     
-    ask = widgets.Label("Delete Everything?")
+    ask = widgets.Label("Borrar Todo??")
     ask.add_class("del")
 
     yes = widgets.Button(description="Yes")
@@ -318,7 +318,7 @@ def change_key(line):
     cancel_button = widgets.Button(description="Cancel")
     cancel_button.add_class("cancel")
 
-    new_key = widgets.Text(placeholder='Enter Your New Civitai API KEY')
+    new_key = widgets.Text(placeholder='Ingresa Tu Nueva Civitai API KEY')
     new_key.add_class("key-input")
 
     current_key = widgets.Text(placeholder='', disabled=True)
@@ -442,7 +442,7 @@ def zrok_register(line):
     exit_button = widgets.Button(description="Exit", layout=widgets.Layout(left= '45%'))
     exit_button.add_class("zrok-btn")
 
-    email_input = widgets.Text(placeholder='Enter Your Valid Email Address', layout=widgets.Layout(width= '75%'))
+    email_input = widgets.Text(placeholder='Ingresa Tu Tu Correo', layout=widgets.Layout(width= '75%'))
     email_input.add_class("email-input")
 
     zrok_button = widgets.HBox([register_button, exit_button], layout=widgets.Layout(
