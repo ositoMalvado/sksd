@@ -55,7 +55,7 @@ def uninstall_webui(line):
     webui, _ = get_webui_paths()
     get_ipython().system(f"rm -rf {webui} {HOME / 'tmp'} {HOME / '.cache/*'}")
     get_ipython().run_line_magic('cd', '-q ~')
-    print(f'{ui} uninstalled.')
+    print(f'{ui} desinstalado.')
     get_ipython().kernel.do_shutdown(True)
 
 def set_paths(ui):
