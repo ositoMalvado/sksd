@@ -8,7 +8,7 @@ from nenen88 import pull, say, download, clone, tempe
 repo = f"git clone -q https://github.com/lllyasviel/stable-diffusion-webui-forge Forge"
 
 HOME = Path.home()
-SRC = HOME / '.gutris1'
+SRC = HOME / '.sksd'
 CSS = SRC / 'setup.css'
 IMG = SRC / 'loading.png'
 MARK = SRC / 'marking.py'

@@ -8,7 +8,7 @@ from nenen88 import say, download, tempe
 repo = f"git clone https://github.com/enricogolfieri/facefusion-open FaceFusion"
 
 HOME = Path.home()
-SRC = HOME / '.gutris1'
+SRC = HOME / '.sksd'
 CSS = SRC / 'setup.css'
 IMG = SRC / 'loading.png'
 MARK = SRC / 'marking.py'

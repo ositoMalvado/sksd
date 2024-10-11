@@ -9,7 +9,7 @@ import subprocess, time, zipfile, sys, os, json, psutil
 
 
 home = Path.home()
-src_src = home / '.gutris1'
+src_src = home / '.sksd'
 css = src_src / "pantat88.css"
 img = src_src / "loading.png"
 startup = home / ".ipython/profile_default/startup"

@@ -9,7 +9,7 @@ version = "v1.10.1"
 repo = f"git clone -q -b {version} https://github.com/gutris1/A1111"
 
 HOME = Path.home()
-SRC = HOME / '.gutris1'
+SRC = HOME / '.sksd'
 CSS = SRC / 'setup.css'
 IMG = SRC / 'loading.png'
 MARK = SRC / 'marking.py'

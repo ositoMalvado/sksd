@@ -2,7 +2,7 @@ import subprocess, sys, logging, json, re, shlex, os, threading
 from pathlib import Path
 from pyngrok import ngrok
 
-SRC = Path.home() / '.gutris1'
+SRC = Path.home() / '.sksd'
 MARK = SRC / 'marking.json'
 RST = '\033[0m'
 ORG = '\033[38;5;208m'

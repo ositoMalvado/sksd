@@ -5,7 +5,7 @@ from ipywidgets import widgets
 from pathlib import Path
 import json, argparse, sys, logging
 
-SRC = Path.home() / '.gutris1'
+SRC = Path.home() / '.sksd'
 CSS = SRC / 'setup.css'
 MARK = SRC / 'marking.json'
 IMG = SRC / "loading.png"

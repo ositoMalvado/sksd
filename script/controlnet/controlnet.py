@@ -7,7 +7,7 @@ src_cn = Path(__file__).parent
 css_cn = src_cn / "cn.css"
 cn15 = src_cn / "cn-15.py"
 cnxl = src_cn / "cn-xl.py"
-img = Path.home() / ".gutris1/loading.png"
+img = Path.home() / ".sksd/loading.png"
 
 def load_css():
     with open(css_cn, "r") as file:

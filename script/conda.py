@@ -5,7 +5,7 @@ from pathlib import Path
 import subprocess, json, shlex
 
 home = Path.home()
-src = home / ".gutris1"
+src = home / ".sksd"
 css = src / "pantat88.css"
 startup = home / ".ipython/profile_default/startup"
 nenen = startup / "nenen88.py"

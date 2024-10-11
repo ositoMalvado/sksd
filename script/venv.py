@@ -5,7 +5,7 @@ import subprocess, os, shlex, json
 from nenen88 import tempe, say, download
 
 HOME = Path.home()
-SRC = HOME / '.gutris1'
+SRC = HOME / '.sksd'
 MARK = SRC / 'marking.json'
 IMG = SRC / 'loading.png'
 

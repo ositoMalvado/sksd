@@ -8,7 +8,7 @@ src_cn = Path(__file__).parent
 css_cn = src_cn / "cn.css"
 tmplora = '/tmp/lora'
 tmpcn = '/tmp/controlnet'
-img = Path.home() / ".gutris1/loading.png"
+img = Path.home() / ".sksd/loading.png"
     
 controlnet_list = {
     "Diffusers XL Canny Mid": [

@@ -3,7 +3,7 @@ from pathlib import Path
 from IPython import get_ipython
 
 home = Path.home()
-gutris1 = home / '.gutris1'
+gutris1 = home / '.sksd'
 marking = gutris1 / 'marking.py'
 zrok_bin = home / '.zrok/bin/zrok'
 startup = home / '.ipython/profile_default/startup'
