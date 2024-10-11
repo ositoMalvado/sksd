@@ -107,11 +107,11 @@ def load_css():
     display(HTML(f"<style>{data}</style>"))
 
 title = widgets.HTML()
-zrok_token = widgets.Text(placeholder='Your ZROK Token')
-ngrok_token = widgets.Text(placeholder='Your NGROK Token')
+zrok_token = widgets.Text(placeholder='Tu ZROK Token')
+ngrok_token = widgets.Text(placeholder='Tu NGROK Token')
 
-launch_args1 = widgets.Text(placeholder='Launch Arguments List')
-launch_args2 = widgets.Text(placeholder='Add Launch Arguments List here')
+launch_args1 = widgets.Text(placeholder='Argumentos De Lanzamiento')
+launch_args2 = widgets.Text(placeholder='Agregar Argumentos de Lanzamiento aquí')
 args_box = widgets.VBox([launch_args1, launch_args2], layout=widgets.Layout(
     display='flex',
     flex_flow='column',
