@@ -5,3 +5,4 @@ ruplacer.exe
 *.jpg
 kaggle/
 .ipynb_checkpoints/
+pre/
