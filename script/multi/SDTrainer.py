@@ -85,7 +85,7 @@ def webui_install():
         display(Image(filename=str(IMG)))
 
     with webui_setup:
-        say("<b>【{red} Installing SD Trainer{d} 】{red}</b>")
+        say("<b>【{red} Instalando SD Trainer{d} 】{red}</b>")
         get_ipython().system(f"{repo}")
 
         marking(SRC, 'marking.json', 'SDTrainer')

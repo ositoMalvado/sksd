@@ -96,7 +96,7 @@ def webui_install():
         display(Image(filename=str(IMG)))
 
     with webui_setup:
-        say("<b>【{red} Installing Face Fusion{d} 】{red}</b>")
+        say("<b>【{red} Instalando Face Fusion{d} 】{red}</b>")
         get_ipython().system(f"{repo}")
 
         check_ffmpeg()

@@ -75,10 +75,10 @@ def conda_install():
 
         cmd_list = [
             (f'rm -rf {home}/.condarc', None),
-            ('conda install --repodata-fn repodata.json -qyc conda-forge conda', f'{BLUE} Installing Anaconda'),
-            ('conda install --repodata-fn repodata.json -qyc conda-forge python=3.10.13', f'{CYAN} Installing Python 3.10.13'),
-            ('conda install -qyc conda-forge glib gperftools openssh pv', f'{PURPLE} Installing Conda Packages'),
-            ('pip install -q psutil aria2 gdown', f'{PINK} Installing Python Packages'),
+            ('conda install --repodata-fn repodata.json -qyc conda-forge conda', f'{BLUE} Instalando Anaconda'),
+            ('conda install --repodata-fn repodata.json -qyc conda-forge python=3.10.13', f'{CYAN} Instalando Python 3.10.13'),
+            ('conda install -qyc conda-forge glib gperftools openssh pv', f'{PURPLE} Instalando Conda Packages'),
+            ('pip install -q psutil aria2 gdown', f'{PINK} Instalando Python Packages'),
             ('conda clean -qy --all', None),
             (f'rm -rf {home}/.cache/*', None)
         ]
@@ -91,7 +91,7 @@ def conda_install():
         zrok_install()
 
         clear_output()
-        print(f"{GREEN} Done")
+        print(f"{GREEN} Listo. Instalación completa. Ejecuta 2 veces esta celda la priemra vez. No hace falta reiniciar el entorno como dice la alerta")
 
         get_ipython().kernel.do_shutdown(True)
 

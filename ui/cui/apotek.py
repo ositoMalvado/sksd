@@ -80,7 +80,7 @@ def install_requirements(requirements_file_path):
                         action = check_package_installed(package_name, required_version)
 
                         if action == "install":
-                            print(f"## Installing '{package_name} {required_version}'")
+                            print(f"## Instalando '{package_name} {required_version}'")
                             subprocess.run([sys.executable, "-m", "pip", "install", "-q", f"{package_name}{comparison_operator}{required_version}"], check=True)
                         elif action == "uninstall":
                             print(f"## Uninstalling '{package_name}'")
@@ -94,7 +94,7 @@ def install_requirements(requirements_file_path):
                         action = check_package_installed(package_name, "")
 
                         if action == "install":
-                            print(f"## Installing '{package_name}'")
+                            print(f"## Instalando '{package_name}'")
                             subprocess.run([sys.executable, "-m", "pip", "install", "-q", package_name], check=True)
                         else:
                             print(f"## '{package_name}' is already installed, skipping")

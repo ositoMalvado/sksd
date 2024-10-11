@@ -91,7 +91,7 @@ def sd_15():
 
     get_ipython().system(f"unzip -qo {WEBUI}/embeddings.zip -d {WEBUI}/embeddings && rm {WEBUI}/embeddings.zip")
 
-    say("<br><b>【{red} Installing Extensions{d} 】{red}</b>")
+    say("<br><b>【{red} Instalando Extensions{d} 】{red}</b>")
     os.chdir(WEBUI / "extensions")
     clone(str(WEBUI / "asd/ext-15.txt"))
 
@@ -107,7 +107,7 @@ def sd_xl():
     for items in extras:
         download(items)
 
-    say("<br><b>【{red} Installing Extensions{d} 】{red}</b>")
+    say("<br><b>【{red} Instalando Extensions{d} 】{red}</b>")
     os.chdir(WEBUI / "extensions")
     clone(str(WEBUI / "asd/ext-xl.txt"))
 
@@ -147,7 +147,7 @@ def webui_install(b):
         display(Image(filename=str(IMG)))
 
     with webui_setup:
-        say("<b>【{red} Installing Stable Diffusion{d} 】{red}</b>")
+        say("<b>【{red} Instalando Stable Diffusion{d} 】{red}</b>")
         get_ipython().system(f"{repo}")
 
         marking(SRC, 'marking.json', 'A1111')
