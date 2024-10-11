@@ -1,6 +1,8 @@
 __pycache__/
 # *.png
+Segsmaker.ipynb
 *.gif
 *.jpg
 kaggle/
 .ipynb_checkpoints/
+.gitignore
