@@ -401,7 +401,7 @@ def change_key(line):
 
                 main_output.clear_output(wait=True)
                 time.sleep(3)
-                say("Done")
+                say("Listo")
 
         def cancel_key(b):
             new_key.value = ''
