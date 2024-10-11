@@ -1,6 +1,6 @@
 [![Abrir en SageMaker](https://lithi.io/file/GU9fQbpp.svg)](https://studiolab.sagemaker.aws/import/github/ositoMalvado/sksd/blob/main/sksd.ipynb)
 
-> Mi Discord: https://discord.gg/BQKEQaGj
+Mi Discord: https://discord.gg/BQKEQaGj
 
 # 🐴 Cuaderno de Stable Diffusion
 

@@ -1,6 +1,8 @@
 __pycache__/
-#*.png
+*.png
 *.gif
 *.jpg
 kaggle/
 .ipynb_checkpoints/
+ruplacer.exe
+segsmaker-main.zip

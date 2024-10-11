@@ -1,6 +1,6 @@
 import ipywidgets as widgets
 from IPython.display import display, HTML, clear_output
-from gutris1 import download
+from ositoMalvado import download
 
 bura = "/home/studio-lab-user/asd/asd/controlnet.css"
 with open(bura, "r") as oppai:

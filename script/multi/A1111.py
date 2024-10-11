@@ -164,7 +164,7 @@ def webui_install(b):
             get_ipython().run_line_magic('run', f'{WEBUI}/venv.py')
             os.chdir(HOME)
             loading.clear_output(wait=True)
-            say("<b>【{red} Listo, si pide reiniciar ignoralo.{d} 】{red}</b>")
+            say("<b>【{red} Done{d} 】{red}</b>")
 
 def go_back(b):
     panel.close()

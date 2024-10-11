@@ -161,7 +161,7 @@ def downloading(b):
             download(url)
 
         loading.clear_output()
-        say("【{red} Listo, si pide reiniciar ignoralo.{d} 】{red}")
+        say("【{red} Done{d} 】{red}")
         get_ipython().run_line_magic('cd', '-q ~')
 
 tempe()
