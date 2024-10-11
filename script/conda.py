@@ -39,7 +39,7 @@ for items in scripts:
 
 main_output = widgets.Output()
 
-save_button = widgets.Button(description="Save")
+save_button = widgets.Button(description="Guardar")
 save_button.add_class("save-button")
 
 civitai_key_box = widgets.Text(placeholder='Ingresa Tu Civitai API KEY Aquí', layout=widgets.Layout(width='350px'))
