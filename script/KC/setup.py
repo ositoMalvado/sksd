@@ -35,7 +35,7 @@ def prevent_silly():
     parser.add_argument('--webui', required=True, help="available webui: A1111, Forge, ComfyUI, ReForge")
     parser.add_argument('--sd', required=True, help="available sd: 1.5, xl")
     parser.add_argument('--civitai_key', required=True, help="your CivitAI API key")
-    parser.add_argument('--hf_read_token', default=None, help="your Huggingface READ Token (optional)")
+    parser.add_argument('--hf_read_token', default=None, help="your Huggingface READ \Token (opcional\)")
 
     args = parser.parse_args()
 
@@ -54,10 +54,10 @@ def prevent_silly():
 
     civitai_key = args.civitai_key.strip()
     if not civitai_key:
-        print("Please enter your CivitAI API key")
+        print("Por favor ingresa tu CivitAI API key")
         return None, None
     if len(civitai_key) < 32:
-        print("API key must be at least 32 characters long")
+        print("API key debe tener 32 caracteres")
         return None, None
 
     hf_read_token = args.hf_read_token.strip()

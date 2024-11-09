@@ -335,7 +335,7 @@ def change_key(line):
     new_civitai_key.add_class("key-input")
 
     new_hf_token = widgets.Text(
-        placeholder='New Huggingface READ Token (optional)',
+        placeholder='New Huggingface READ \Token (opcional\)',
         layout=widgets.Layout(left='6px', width='340px'))
     new_hf_token.add_class("key-hf")
     
@@ -435,11 +435,11 @@ def change_key(line):
 
             with main_output:
                 if not civitai_key:
-                    print("Please enter your CivitAI API Key")
+                    print("Por favor ingresa tu CivitAI API Key")
                     return
 
                 if len(civitai_key) < 32:
-                    print("API key must be at least 32 characters long")
+                    print("API key debe tener 32 caracteres")
                     return
 
                 civitai_ke = {"civitai-api-key": civitai_key}
@@ -505,7 +505,7 @@ def zrok_register(line):
     exit_button = widgets.Button(description="Exit", layout=widgets.Layout(left= '45%'))
     exit_button.add_class("zrok-btn")
 
-    email_input = widgets.Text(placeholder='Enter Your Valid Email Address', layout=widgets.Layout(width= '75%'))
+    email_input = widgets.Text(placeholder='Ingresa un Correo', layout=widgets.Layout(width= '75%'))
     email_input.add_class("email-input")
 
     zrok_button = widgets.HBox([register_button, exit_button], layout=widgets.Layout(

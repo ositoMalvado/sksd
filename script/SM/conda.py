@@ -42,10 +42,10 @@ main_output = widgets.Output()
 save_button = widgets.Button(description="Save")
 save_button.add_class("save-button")
 
-civitai_key_box = widgets.Text(placeholder='Enter Your Civitai API Key Here', layout=widgets.Layout(width='350px'))
+civitai_key_box = widgets.Text(placeholder='Ingresa Tu Civitai API Key Aqui', layout=widgets.Layout(width='350px'))
 civitai_key_box.add_class("api-input")
 
-hf_token_box = widgets.Text(placeholder='Huggingface READ Token (optional)', layout=widgets.Layout(width='350px'))
+hf_token_box = widgets.Text(placeholder='Huggingface READ \Token (opcional\)', layout=widgets.Layout(width='350px'))
 hf_token_box.add_class("api-input")
 
 input_widget = widgets.Box(
@@ -130,11 +130,11 @@ def key_widget(civitai_key='', hf_token=''):
 
         with main_output:
             if not civitai_key:
-                print("Please enter your Civitai API Key")
+                print("Por favor ingresa tu Civitai API Key")
                 return
 
             if len(civitai_key) < 32:
-                print("API key must be at least 32 characters long")
+                print("API key debe tener 32 caracteres")
                 return
 
             civitai_key_value = {"civitai-api-key": civitai_key}

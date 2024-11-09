@@ -224,7 +224,7 @@ onUiLoaded(function () {
         } catch (error) {
         }
       } else {
-        txt_output_el.value = "Nothing to See Here";
+        txt_output_el.value = "Nada que Ver Aqui";
       }
 
       let appEvent = new Event("input", { bubbles: true });
