@@ -100,7 +100,7 @@ def conda_install():
 
     except KeyboardInterrupt:
         clear_output()
-        print("^ Canceled")
+        print("^ Cancelado")
 
 def load_css():
     with open(css, "r") as file:

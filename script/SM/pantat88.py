@@ -277,7 +277,7 @@ def ariari(fc, fn):
         qqqqq.wait()
 
     except KeyboardInterrupt:
-        print(f"\n{'':>2}^ Canceled")
+        print(f"\n{'':>2}^ Cancelado")
 
 
 def curlly(fc, fn):
@@ -330,7 +330,7 @@ def curlly(fc, fn):
             pass
 
     except KeyboardInterrupt:
-        print(f"{'':>2}^ Canceled")
+        print(f"{'':>2}^ Cancelado")
 
 
 def ketsuno_ana(fc, fn):

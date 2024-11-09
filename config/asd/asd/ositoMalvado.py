@@ -173,7 +173,7 @@ def ketsuno_ana(fc, fn, use_auth=False):
         print(f"{'':>2}^ Error: Remove '?type=Model&format=SafeTensor&size=pruned&fp=fp16' from the civitai URL")
     
     except KeyboardInterrupt:
-        print(f"{'':>2}^ Canceled")
+        print(f"{'':>2}^ Cancelado")
 
 def clone(line):
     file_path = os.path.expanduser(line.strip())

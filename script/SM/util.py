@@ -328,10 +328,10 @@ def change_key(line):
     save_button = widgets.Button(description="Guardar")
     save_button.add_class("save")
 
-    cancel_button = widgets.Button(description="Cancel")
+    cancel_button = widgets.Button(description="Cancelar")
     cancel_button.add_class("cancel")
 
-    new_civitai_key = widgets.Text(placeholder='New Civitai API KEY')
+    new_civitai_key = widgets.Text(placeholder='Nuevo Civitai API KEY')
     new_civitai_key.add_class("key-input")
 
     new_hf_token = widgets.Text(
@@ -471,7 +471,7 @@ def change_key(line):
             with main_output:
                 input_widget.close()
                 main_output.clear_output(wait=True)
-                say("^ Canceled")
+                say("^ Cancelado")
 
         save_button.on_click(save_key)
         cancel_button.on_click(cancel_key)

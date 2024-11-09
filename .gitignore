@@ -3,6 +3,7 @@ __pycache__/
 *.jpg
 kaggle/
 .ipynb_checkpoints/
+sksd_colab.ipynb
 pre/
 backup/
 ruplacer.exe

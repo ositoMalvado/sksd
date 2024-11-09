@@ -124,8 +124,8 @@ title = widgets.HTML()
 zrok_token = widgets.Text(placeholder='Your ZROK Token')
 ngrok_token = widgets.Text(placeholder='Your NGROK Token')
 
-launch_args1 = widgets.Text(placeholder='Launch Arguments List')
-launch_args2 = widgets.Text(placeholder='Add Launch Arguments List here')
+launch_args1 = widgets.Text(placeholder='Lista de Argumentos')
+launch_args2 = widgets.Text(placeholder='Add Launch Agrega Argumentos Aqui')
 args_box = widgets.VBox([launch_args1, launch_args2], layout=widgets.Layout(
     display='flex',
     flex_flow='column',
@@ -143,7 +143,7 @@ top = widgets.HBox([tunnel, title], layout=widgets.Layout(
     flex_flow='row',
     justify_content='space-between'))
 
-launch_button = widgets.Button(description='Launch')
+launch_button = widgets.Button(description='Go!!!')
 exit_button = widgets.Button(description='Exit')
 cpu_cb = widgets.Checkbox(value=False, description='CPU', layout=widgets.Layout(left='10px'))
 button_box = widgets.HBox([launch_button, cpu_cb, exit_button], layout=widgets.Layout(

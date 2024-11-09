@@ -372,7 +372,7 @@ def lets_go():
         try:
             webui_install(webui, sd)
         except KeyboardInterrupt:
-            print("\nCanceled.")
+            print("\nCancelado.")
 
 
 version = 'v1.10.1'
