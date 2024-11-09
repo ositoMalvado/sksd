@@ -1,5 +1,5 @@
 [![Abrir en SageMaker](https://lithi.io/file/GU9fQbpp.svg)](https://studiolab.sagemaker.aws/import/github/ositoMalvado/sksd/blob/main/notebook/sksd.ipynb)
-[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ositoMalvado/sksd/blob/master/notebook/sksd_colab.ipynb)
+[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ositoMalvado/sksd/blob/main/notebook/sksd_colab.ipynb)
 
 Mi Discord: https://discord.gg/BQKEQaGj
 
