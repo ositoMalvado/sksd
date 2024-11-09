@@ -325,7 +325,7 @@ def change_key(line):
     key_file = src_src / "api-key.json"
 
     main_output = widgets.Output()
-    save_button = widgets.Button(description="Save")
+    save_button = widgets.Button(description="Guardar")
     save_button.add_class("save")
 
     cancel_button = widgets.Button(description="Cancel")
