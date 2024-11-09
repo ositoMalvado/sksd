@@ -89,7 +89,7 @@ def storage(line):
 def delete_everything(line):    
     main_output = widgets.Output()
     
-    ask = widgets.Label("Delete Everything?")
+    ask = widgets.Label("Borrar Todo??")
     ask.add_class("del")
 
     yes = widgets.Button(description="Yes")
@@ -462,7 +462,7 @@ def change_key(line):
 
                 main_output.clear_output(wait=True)
                 time.sleep(3)
-                say("Done")
+                say("Listo")
 
         def cancel_key(b):
             new_civitai_key.value = ''

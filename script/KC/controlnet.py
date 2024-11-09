@@ -210,8 +210,8 @@ checkbox2_xl = widgets.VBox(
     layout=widgets.Layout(left='20px'))
 checkbox_layout_xl = widgets.HBox([checkbox1_xl, checkbox2_xl], layout=widgets.Layout(top='-40px', align_items='flex-start'))
 download_button_xl = widgets.Button(description="Download", layout=widgets.Layout(left='130px'))
-select_all_button_xl = widgets.Button(description="Select All", layout=widgets.Layout(left='30px'))
-unselect_all_button_xl = widgets.Button(description="Unselect All", layout=widgets.Layout(left='35px'))
+select_all_button_xl = widgets.Button(description="Todo", layout=widgets.Layout(left='30px'))
+unselect_all_button_xl = widgets.Button(description="Nada", layout=widgets.Layout(left='35px'))
 bottom_box_xl = widgets.Button(description="", disabled=True)
 button_layout_xl = widgets.HBox([select_all_button_xl, unselect_all_button_xl, download_button_xl, bottom_box_xl])
 cnxl_panel = widgets.Box(
@@ -230,8 +230,8 @@ checkbox2_15 = widgets.VBox(
     layout=widgets.Layout(left='-60px'))
 checkbox_layout_15 = widgets.HBox([checkbox1_15, checkbox2_15], layout=widgets.Layout(top='-40px', align_items='flex-start'))
 download_button_15 = widgets.Button(description="Download", layout=widgets.Layout(width='130px', left='110px'))
-select_all_button_15 = widgets.Button(description="Select All", layout=widgets.Layout(width='130px', left='15px'))
-unselect_all_button_15 = widgets.Button(description="Unselect All", layout=widgets.Layout(width='130px', left='20px'))
+select_all_button_15 = widgets.Button(description="Todo", layout=widgets.Layout(width='130px', left='15px'))
+unselect_all_button_15 = widgets.Button(description="Nada", layout=widgets.Layout(width='130px', left='20px'))
 bottom_box_15 = widgets.Button(description="", disabled=True)
 button_layout_15 = widgets.HBox([select_all_button_15, unselect_all_button_15, download_button_15, bottom_box_15])
 cn15_panel = widgets.Box(

@@ -80,7 +80,7 @@ def venv_install():
                 req_space -= removing(tmp / 'controlnet', req_space)
 
         os.chdir(BASEPATH)
-        say('<br>【{red} Installing VENV{d} 】{red}')
+        say('<br>【{red} Instalando VENV{d} 】{red}')
         download(url)
 
         if BASEPATH == '/content':

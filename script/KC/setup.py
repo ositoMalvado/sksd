@@ -218,7 +218,7 @@ def Extensions(ui, WEBUI):
     from nenen88 import clone, say, download
 
     if ui == 'ComfyUI':
-        say("<br><b>【{red} Installing Custom Nodes{d} 】{red}</b>")
+        say("<br><b>【{red} Instalando Custom Nodes{d} 】{red}</b>")
         os.chdir(WEBUI / "custom_nodes")
         clone(str(WEBUI / "asd/custom_nodes.txt"))
         print()
@@ -232,7 +232,7 @@ def Extensions(ui, WEBUI):
             download(item)
 
     else:
-        say("<br><b>【{red} Installing Extensions{d} 】{red}</b>")
+        say("<br><b>【{red} Instalando Extensions{d} 】{red}</b>")
         os.chdir(WEBUI / "extensions")
         clone(str(WEBUI / "asd/extension.txt"))
         get_ipython().system("git clone -q https://github.com/gutris1/sd-encrypt-image")
@@ -274,22 +274,22 @@ def webui_install(ui, which_sd):
     if ui == 'A1111':
         WEBUI = HOME / 'A1111'
         repo = f'git clone -q -b {version} https://github.com/gutris1/A1111'
-        say("<b>【{red} Installing A1111{d} 】{red}</b>")
+        say("<b>【{red} Instalando A1111{d} 】{red}</b>")
 
     elif ui == 'Forge':
         WEBUI = HOME / 'Forge'
         repo = f'git clone -q https://github.com/lllyasviel/stable-diffusion-webui-forge Forge'
-        say("<b>【{red} Installing Forge{d} 】{red}</b>")
+        say("<b>【{red} Instalando Forge{d} 】{red}</b>")
 
     elif ui == 'ComfyUI':
         WEBUI = HOME / 'ComfyUI'
         repo = f'git clone -q https://github.com/comfyanonymous/ComfyUI'
-        say("<b>【{red} Installing ComfyUI{d} 】{red}</b>")
+        say("<b>【{red} Instalando ComfyUI{d} 】{red}</b>")
 
     elif ui == 'ReForge':
         WEBUI = HOME / 'ReForge'
         repo = f'git clone -q https://github.com/Panchovix/stable-diffusion-webui-reForge ReForge'
-        say("<b>【{red} Installing ReForge{d} 】{red}</b>")
+        say("<b>【{red} Instalando ReForge{d} 】{red}</b>")
 
     EMB = f"{WEBUI}/models/embeddings" if ui == 'ComfyUI' else f"{WEBUI}/embeddings"
     VAE = f"{WEBUI}/models/vae" if ui == 'ComfyUI' else f"{WEBUI}/models/VAE"
@@ -311,7 +311,7 @@ def webui_install(ui, which_sd):
     get_ipython().run_line_magic('run', f'{MRK}')
     get_ipython().run_line_magic('run', f'{WEBUI}/venv.py')
 
-    say("<br><b>【{red} Done{d} 】{red}</b>")
+    say("<br><b>【{red} Listo{d} 】{red}</b>")
 
     tempe()
     os.chdir(HOME)

@@ -80,7 +80,7 @@ def webui_req():
     tempe()
 
 def Extensions():
-    say("<br><b>【{red} Installing Extensions{d} 】{red}</b>")
+    say("<br><b>【{red} Instalando Extensions{d} 】{red}</b>")
     os.chdir(WEBUI / "extensions")
     clone(str(WEBUI / "asd/extension.txt"))
 
@@ -148,7 +148,7 @@ def webui_install(b):
         display(Image(filename=str(IMG)))
 
     with webui_setup:
-        say("<b>【{red} Installing Stable Diffusion{d} 】{red}</b>")
+        say("<b>【{red} Instalando Stable Diffusion{d} 】{red}</b>")
         get_ipython().system(f"{repo}")
 
         marking(SRC, 'marking.json', 'A1111')
@@ -165,7 +165,7 @@ def webui_install(b):
             get_ipython().run_line_magic('run', f'{WEBUI}/venv.py')
             os.chdir(HOME)
             loading.clear_output(wait=True)
-            say("<b>【{red} Done{d} 】{red}</b>")
+            say("<b>【{red} Listo{d} 】{red}</b>")
 
 def go_back(b):
     panel.close()
@@ -198,7 +198,7 @@ panel.add_class("multi-panel")
 
 def check_webui(ui_name, path, mark):
     if path.exists():
-        print(f'{ui_name} is installed, Uninstall first.')
+        print(f'{ui_name} esta instalado, Desinstala primero..')
         get_ipython().run_line_magic('run', f'{mark}')
         return True
     return False

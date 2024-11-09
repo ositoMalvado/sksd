@@ -98,7 +98,7 @@ def webui_install():
         display(Image(filename=str(IMG)))
 
     with webui_setup:
-        say("<b>【{red} Installing Face Fusion{d} 】{red}</b>")
+        say("<b>【{red} Instalando Face Fusion{d} 】{red}</b>")
         get_ipython().system(f"{repo}")
 
         check_ffmpeg()
@@ -112,14 +112,14 @@ def webui_install():
             get_ipython().run_line_magic('run', f'{WEBUI}/venv.py')
             os.chdir(HOME)
             loading.clear_output(wait=True)
-            say("<b>【{red} Done{d} 】{red}</b>")
+            say("<b>【{red} Listo{d} 】{red}</b>")
 
 loading = widgets.Output()
 webui_setup = widgets.Output()
 
 def check_webui(ui_name, path, mark):
     if path.exists():
-        print(f'{ui_name} is installed, Uninstall first.')
+        print(f'{ui_name} esta instalado, Desinstala primero..')
         get_ipython().run_line_magic('run', f'{mark}')
         return True
     return False
