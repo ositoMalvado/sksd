@@ -47,7 +47,7 @@ def download(line):
     args = line.split()
 
     if not args:
-        print("  missing URL, downloading nothing")
+        print("  no hay URL. Continuando")
         return
 
     url = args[0]
@@ -88,7 +88,7 @@ def strip_(url):
                     page = f"https://civitai.com/models/{model_id}?modelVersionId={version_id}"
                     print(f"  -> {page}")
                 
-                print("  The model is in early access and requires payment for downloading.\n")
+                print("  El modelo recién salió, todavía no se puede descargar para descargar.\n")
                 return None
 
             download_url = data["downloadUrl"] if "downloadUrl" in data else data["modelVersions"][0]["downloadUrl"]
@@ -306,7 +306,7 @@ def ariari(fc, fn):
         Aria2Process.wait()
 
     except KeyboardInterrupt:
-        print(f"\n{'':>2}^ Canceled")
+        print(f"\n{'':>2}^ Cancelado")
 
 
 def curlly(fc, fn):
@@ -348,8 +348,8 @@ def curlly(fc, fn):
         if zura.returncode != 0:
             if "curl: (23)" in oppai:
                 print(
-                    f"{'':>2}^ File already exists; download skipped. "
-                    "Append a custom name after the URL or PATH to overwrite."
+                    f"{'':>2}^ El archivo ya existe, saltando descarga. "
+                    "Pon un nombre de archivo diferente, o un destino diferente"
                 )
             elif "curl: (3)" in oppai:
                 print("")
@@ -359,7 +359,7 @@ def curlly(fc, fn):
             pass
 
     except KeyboardInterrupt:
-        print(f"{'':>2}^ Canceled")
+        print(f"{'':>2}^ Cancelado")
 
 
 def ketsuno_ana(fc, fn):

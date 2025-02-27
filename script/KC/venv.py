@@ -55,7 +55,7 @@ def venv_install():
     url = 'https://huggingface.co/pantat88/back_up/resolve/main/venv-torch251-cu121.tar.lz4'
     fn = Path(url).name
 
-    say('<br>【{red} Installing VENV{d} 】{red}')
+    say('<br>【{red} Instalando VENV{d} 】{red}')
     CD(BASEPATH)
     download(url)
 

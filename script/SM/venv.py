@@ -127,7 +127,7 @@ def install_venv(ui, url, need_space, fn):
                 req_space -= removing(path, req_space)
 
     CD(tmp)
-    say('<b>【{red} Installing VENV{d} 】{red}</b>')
+    say('<b>【{red} Instalando VENV{d} 】{red}</b>')
     download(url)
 
     SyS(f'pv {fn} | lz4 -d | tar xf -')

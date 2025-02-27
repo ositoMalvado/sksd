@@ -453,7 +453,7 @@ def change_key(line):
 
                 main_output.clear_output(wait=True)
                 time.sleep(3)
-                say("Done")
+                say("Listo")
 
         def cancel_key(b):
             new_civitai_key.value = ''
@@ -462,7 +462,7 @@ def change_key(line):
             with main_output:
                 input_widget.close()
                 main_output.clear_output(wait=True)
-                say("^ Canceled")
+                say("^ Cancelado")
 
         save_button.on_click(save_key)
         cancel_button.on_click(cancel_key)
@@ -496,7 +496,7 @@ def zrok_register(line):
     exit_button = widgets.Button(description="Exit", layout=widgets.Layout(left= '45%'))
     exit_button.add_class("zrok-btn")
 
-    email_input = widgets.Text(placeholder='Enter Your Valid Email Address', layout=widgets.Layout(width= '75%'))
+    email_input = widgets.Text(placeholder='Ingresa un Correo Válido', layout=widgets.Layout(width= '75%'))
     email_input.add_class("email-input")
 
     zrok_button = widgets.HBox([register_button, exit_button], layout=widgets.Layout(

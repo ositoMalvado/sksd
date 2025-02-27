@@ -92,8 +92,8 @@ def load_css():
     display(HTML(f"<style>{CSS.read_text()}</style>"))
 
 title = widgets.HTML()
-zrok_token = widgets.Text(placeholder='Your ZROK Token')
-ngrok_token = widgets.Text(placeholder='Your NGROK Token')
+zrok_token = widgets.Text(placeholder='Tu ZROK Token')
+ngrok_token = widgets.Text(placeholder='Tu NGROK Token')
 
 launch_args = widgets.Text(placeholder='Launch Arguments List', layout=widgets.Layout(top='20px'))
 

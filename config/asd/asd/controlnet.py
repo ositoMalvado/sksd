@@ -126,7 +126,7 @@ cb2 = widgets.VBox(
 )
 cb2.add_class("checkbox-group2")
 
-db = widgets.Button(description="Download")
+db = widgets.Button(description="Descargar")
 db.add_class("download-button")
 dbo = widgets.Output()
 cbc = widgets.HBox([cb1, cb2], layout=widgets.Layout(align_items="flex-start"))
@@ -142,11 +142,11 @@ def usa_cb(b):
         checkbox.value = False
 
 
-sab = widgets.Button(description="Select All")
+sab = widgets.Button(description="Todo")
 sab.add_class("select-all-button")
 sab.on_click(sa_cb)
 
-usab = widgets.Button(description="Unselect All")
+usab = widgets.Button(description="Nada")
 usab.add_class("unselect-all-button")
 usab.on_click(usa_cb)
 

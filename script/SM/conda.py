@@ -33,7 +33,7 @@ main_output = widgets.Output()
 save_button = widgets.Button(description="Save")
 save_button.add_class("save-button")
 
-civitai_key_box = widgets.Text(placeholder='Enter Your Civitai API Key Here', layout=widgets.Layout(width='350px'))
+civitai_key_box = widgets.Text(placeholder='Civitai API KEY Aquí', layout=widgets.Layout(width='350px'))
 civitai_key_box.add_class("api-input")
 
 hf_token_box = widgets.Text(placeholder='Huggingface READ Token (optional)', layout=widgets.Layout(width='350px'))
@@ -60,11 +60,11 @@ def CondaInstall():
         cmd_list = [
             (f'rm -rf {home}/.condarc', None),
             ('conda config --add channels conda-forge', None),
-            ('conda install -qy mamba', f'{BLUE} Installing Anaconda'),
+            ('conda install -qy mamba', f'{BLUE} Instalando Anaconda'),
             ('mamba install -y conda', None),
-            ('mamba install -y python=3.10.13', f'{CYAN} Installing Python 3.10'),
-            ('mamba install -y glib gperftools openssh pv gputil curl', f'{PURPLE} Installing Conda Packages'),
-            ('pip install psutil aria2 gdown', f'{PINK} Installing Python Packages'),
+            ('mamba install -y python=3.10.13', f'{CYAN} Instalando Python 3.10'),
+            ('mamba install -y glib gperftools openssh pv gputil curl', f'{PURPLE} Instalando Conda Packages'),
+            ('pip install psutil aria2 gdown', f'{PINK} Instalando Python Packages'),
             ('conda clean -qy --all', None)
         ]
 
@@ -75,13 +75,13 @@ def CondaInstall():
 
         SyS(f'rm -rf {home}/.cache/* {home}/.condarc')
         clear_output()
-        print(f"{GREEN} Done")
+        print(f"{GREEN} Listo")
 
         get_ipython().kernel.do_shutdown(True)
 
     except KeyboardInterrupt:
         clear_output()
-        print("^ Canceled")
+        print("^ Cancelado")
 
 def LoadCSS(): 
     display(HTML(f"<style>{open(css).read()}</style>"))
@@ -141,7 +141,7 @@ def KeyWidget(civitai_key='', hf_token=''):
             if mv < 24:
                 CondaInstall()
             else:
-                print(f"{GREEN} Done")
+                print(f"{GREEN} Listo")
                 get_ipython().kernel.do_shutdown(True)
 
     save_button.on_click(KeyInputs)

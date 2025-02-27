@@ -238,7 +238,7 @@ def WebUIExtensions(U, W, M):
     CD(EXT)
 
     if U == 'ComfyUI':
-        say("<br><b>【{red} Installing Custom Nodes{d} 】{red}</b>")
+        say("<br><b>【{red} Instalando Custom Nodes{d} 】{red}</b>")
         clone(str(W / "asd/custom_nodes.txt"))
         print()
 
@@ -248,7 +248,7 @@ def WebUIExtensions(U, W, M):
         ]: download(faces)
 
     else:
-        say("<br><b>【{red} Installing Extensions{d} 】{red}</b>")
+        say("<br><b>【{red} Instalando Extensions{d} 】{red}</b>")
         clone(str(W / "asd/extension.txt"))
         clone('https://github.com/BlafKing/sd-civitai-browser-plus')
 
@@ -297,7 +297,7 @@ def webui_install(ui, which_sd):
         EMB = MODELS / 'Embeddings' if ui == 'SwarmUI' else (MODELS / 'embeddings' if ui == 'ComfyUI' else WEBUI / 'embeddings')
         VAE = MODELS / 'vae' if ui == 'ComfyUI' else MODELS / 'VAE'
 
-        say(f"<b>【{{red}} Installing {WEBUI.name}{{d}} 】{{red}}</b>")
+        say(f"<b>【{{red}} Instalando {WEBUI.name}{{d}} 】{{red}}</b>")
         clone(repo)
 
         marking(SRC, MARKED, ui)
@@ -310,7 +310,7 @@ def webui_install(ui, which_sd):
             get_ipython().run_line_magic('run', str(WEBUI / 'venv.py'))
 
             loading.clear_output(wait=True)
-            say("<b>【{red} Done{d} 】{red}</b>")
+            say("<b>【{red} Listo{d} 】{red}</b>")
             CD(HOME)
 
 def facetrainer(ui):
@@ -327,7 +327,7 @@ def facetrainer(ui):
             WEBUI = HOME / ui
             repo, vnv = SDTFusion[ui]
 
-        say(f"<b>【{{red}} Installing {WEBUI.name}{{d}} 】{{red}}</b>")
+        say(f"<b>【{{red}} Instalando {WEBUI.name}{{d}} 】{{red}}</b>")
         clone(repo)
 
         marking(SRC, MARKED, ui)
@@ -362,7 +362,7 @@ def facetrainer(ui):
             get_ipython().run_line_magic('run', str(WEBUI / 'venv.py'))
 
             loading.clear_output(wait=True)
-            say("<b>【{red} Done{d} 】{red}</b>")
+            say("<b>【{red} Listo{d} 】{red}</b>")
             CD(HOME)
 
 def oppai(btn, sd=None):

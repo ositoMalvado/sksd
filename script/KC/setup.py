@@ -374,7 +374,7 @@ def webui_extension(U, W, M):
     CD(EXT)
 
     if U == 'ComfyUI':
-        say("<br><b>【{red} Installing Custom Nodes{d} 】{red}</b>")
+        say("<br><b>【{red} Instalando Custom Nodes{d} 】{red}</b>")
         clone(str(W / "asd/custom_nodes.txt"))
         print()
 
@@ -384,7 +384,7 @@ def webui_extension(U, W, M):
         ]: download(faces)
 
     else:
-        say("<br><b>【{red} Installing Extensions{d} 】{red}</b>")
+        say("<br><b>【{red} Instalando Extensions{d} 】{red}</b>")
         clone(str(W / "asd/extension.txt"))
 
         if ENVNAME == 'Kaggle':
@@ -434,12 +434,12 @@ def webui_selection(ui, which_sd):
     EMB = MODELS / 'Embeddings' if ui == 'SwarmUI' else (MODELS / 'embeddings' if ui == 'ComfyUI' else WEBUI / 'embeddings')
     VAE = MODELS / 'vae' if ui == 'ComfyUI' else MODELS / 'VAE'
 
-    say(f"<b>【{{red}} Installing {WEBUI.name}{{d}} 】{{red}}</b>")
+    say(f"<b>【{{red}} Instalando {WEBUI.name}{{d}} 】{{red}}</b>")
     clone(repo)
 
     webui_installation(ui, which_sd, WEBUI, MODELS, EMB, VAE)
 
-    say("<br><b>【{red} Done{d} 】{red}</b>")
+    say("<br><b>【{red} Listo{d} 】{red}</b>")
     tempe()
     CD(HOME)
 
@@ -462,7 +462,7 @@ def webui_checker():
         try:
             webui_selection(webui, sd)
         except KeyboardInterrupt:
-            print("\nCanceled.")
+            print("\nCancelado.")
 
 
 def webui_misc():
