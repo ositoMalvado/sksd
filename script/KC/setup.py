@@ -89,7 +89,7 @@ def prevent_silly():
         return None, None, None
 
     if not arg3:
-        print(f"{ERR}: CivitAI API key is missing.")
+        print(f"{ERR}: Tienes que poner el API Key de CivitAI.")
         return None, None, None
     if re.search(r'\s+', arg3):
         print(f"{ERR}: CivitAI API key contains spaces '{arg3}' - not allowed.")
