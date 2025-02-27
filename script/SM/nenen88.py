@@ -78,6 +78,19 @@ def strip_(url):
                 response = requests.get(f"https://civitai.com/api/v1/models/{model_id}")
 
             data = response.json()
+
+            early_access = data.get("earlyAccessEndsAt", None)
+            if early_access:
+                model_id = data.get("modelId")
+                version_id = data.get("id")
+                
+                if model_id and version_id:
+                    page = f"https://civitai.com/models/{model_id}?modelVersionId={version_id}"
+                    print(f"  -> {page}")
+                
+                print("  The model is in early access and requires payment for downloading.\n")
+                return None
+
             download_url = data["downloadUrl"] if "downloadUrl" in data else data["modelVersions"][0]["downloadUrl"]
             return f"{download_url}?token={toket}"
 
@@ -108,6 +121,9 @@ def netorare(line):
     path, fn = "", ""
     url = strip_(url)
     _dir = Path.cwd()
+
+    if not url:
+        return
 
     aria2c = (
         "aria2c --header='User-Agent: Mozilla/5.0' "
@@ -205,7 +221,7 @@ def gdrown(url, path=None, fn=None):
 
 def ariari(fc, fn):
     try:
-        qqqqq = subprocess.Popen(
+        Aria2Process = subprocess.Popen(
             shlex.split(fc),
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
@@ -225,11 +241,12 @@ def ariari(fc, fn):
         YELLOW = "\033[33m"
         BLUE = "\033[38;5;69m"
         PURPLE = "\033[38;5;135m"
+        ORANGE = "\033[38;5;208m"
         RESET = "\033[0m"
 
         while True:
-            lines = qqqqq.stderr.readline()
-            if lines == '' and qqqqq.poll() is not None:
+            lines = Aria2Process.stderr.readline()
+            if lines == '' and Aria2Process.poll() is not None:
                 break
 
             if lines:
@@ -240,19 +257,31 @@ def ariari(fc, fn):
                         code.append(outputs)
                     if '|' in outputs and 'ERR' in outputs:
                         outputs = re.sub(r'(\|\s*)(ERR)(\s*\|)', f'\\1{RED}\\2{RESET}\\3', outputs)
+                        first, _, last = outputs.rpartition('|')
+                        last = re.sub(r'/', f'{CYAN}/{RESET}', last)
+                        outputs = f"{first}|{last}"
                         err.append(outputs)
 
                     if re.match(r'\[#\w{6}\s.*\]', outputs):
                         outputs = re.sub(r'\[', MAGENTA + '【' + RESET, outputs)
                         outputs = re.sub(r'\]', MAGENTA + '】' + RESET, outputs)
-                        outputs = re.sub(r'(#)(\w+)', f'\\1{GREEN}\\2{RESET}', outputs)
-                        outputs = re.sub(r'(\(\d+%\))', f'{CYAN}\\1{RESET}', outputs)
-                        outputs = re.sub(r'(CN:)(\d+)', f"\\1{BLUE}\\2{RESET}", outputs)
-                        outputs = re.sub(r'(DL:)(\d+\w+)', f"\\1{PURPLE}\\2{RESET}", outputs)
-                        outputs = re.sub(r'(ETA:)(\d+\w+)', f"\\1{YELLOW}\\2{RESET}", outputs)
+                        outputs = re.sub(r'(#)(\w+)', f'{CYAN}\\1{RESET}{GREEN}\\2{RESET}', outputs)
+                        outputs = re.sub(
+                            r'(\d+(\.\d+)?)(\w+)(/)(\d+(\.\d+)?)(\w+)',
+                            f"\\1{PURPLE}\\3{RESET}{MAGENTA}\\4{RESET}\\5{PURPLE}\\7{RESET}",
+                            outputs
+                        )
+                        outputs = re.sub(
+                            r'(\()(\d+%)(\))',
+                            f'{MAGENTA}\\1{RESET}\\2{MAGENTA}\\3{RESET}',
+                            outputs
+                        )
+                        outputs = re.sub(r'(CN)(:)(\d+)', f"{CYAN}\\1{RESET}\\2{ORANGE}\\3{RESET}", outputs)
+                        outputs = re.sub(r'(DL)(:)(\d+(\.\d+)?)(\w+)', f"{CYAN}\\1{RESET}\\2\\3{PURPLE}\\5{RESET}", outputs)
+                        outputs = re.sub(r'(ETA)(:)(\d+\w+)', f"{CYAN}\\1{RESET}\\2{YELLOW}\\3{RESET}", outputs)
                         lines = outputs.splitlines()
                         for line in lines:
-                            print(f"\r{' '*180}\r {line}", end="")
+                            print(f"\r{' '*300}\r {line}", end="")
                             sys.stdout.flush()
                         br = True
                         break
@@ -269,12 +298,15 @@ def ariari(fc, fn):
             for lines in result[stripe:].splitlines():
                 if '|' in lines and 'OK' in lines:
                     lines = re.sub(r'(\|\s*)(OK)(\s*\|)', f'\\1{GREEN}\\2{RESET}\\3', lines)
+                    first, _, last = lines.rpartition('|')
+                    last = re.sub(r'/', f'{ORANGE}/{RESET}', last)
+                    lines = f"{first}|{last}"
                     print(f"  {lines}")
 
-        qqqqq.wait()
+        Aria2Process.wait()
 
     except KeyboardInterrupt:
-        print(f"\n{'':>2}^ Cancelado")
+        print(f"\n{'':>2}^ Canceled")
 
 
 def curlly(fc, fn):
@@ -327,7 +359,7 @@ def curlly(fc, fn):
             pass
 
     except KeyboardInterrupt:
-        print(f"{'':>2}^ Cancelado")
+        print(f"{'':>2}^ Canceled")
 
 
 def ketsuno_ana(fc, fn):
@@ -337,25 +369,32 @@ def ketsuno_ana(fc, fn):
         curlly(fc, fn)
 
 
-def clone(line):
-    path = Path(line).expanduser()
+def clone(i):
+    p = Path(i).expanduser()
 
-    if line.endswith('.txt') and path.is_file():
-        with open(path, 'r') as file:
-            lines = [line.strip() for line in file]
+    def processed(inputs):
+        inputs = inputs.strip()
+        if inputs.startswith("git clone"):
+            return inputs[len("git clone "):].strip()
+        return inputs
+
+    if i.endswith('.txt') and p.is_file():
+        with open(p, 'r') as file:
+            o = [f"git clone {processed(i)}" for i in file]
     else:
-        lines = line if isinstance(line, list) else [line]
+        o = [f"git clone {processed(i)}"] if isinstance(i, str) else [f"git clone {processed(l)}" for l in i]
 
-    cloning(lines)
+    cloning(o)
 
-def cloning(lines):
-    for line in lines:
-        line = line.strip()
-        if not line:
+def cloning(o):
+    for i in o:
+        i = i.strip()
+        if not i:
             continue
 
-        cmd = shlex.split(line)
+        cmd = shlex.split(i)
         url = None
+
         for repo in cmd:
             if re.match(r'https?://', repo):
                 url = repo
@@ -379,9 +418,9 @@ def cloning(lines):
                     print(f"{'':>2}{output}")
 
                 elif output.startswith("Cloning into"):
-                    lines = output.split("'")[1]
-                    names = "/".join(lines.split("/")[-3:])
-                    print(f"{'':>2}{names} => {url}")
+                    o = output.split("'")[1]
+                    names = "/".join(o.split("/")[-3:])
+                    print(f"{'':>2}{names} ▶ {url}")
 
         proc.wait()
 
@@ -391,13 +430,13 @@ def tempe():
     ENV = None
 
     env_list = {
-        'Colab': ('/content', 'COLAB_JUPYTER_TRANSPORT'),
+        'Colab': ('/content', 'COLAB_JUPYTER_TOKEN'),
         'Kaggle': ('/kaggle', 'KAGGLE_DATA_PROXY_TOKEN'),
         'SageMaker': ('/home/studio-lab-user', 'SAGEMAKER_INTERNAL_IMAGE_URI')
     }
 
     for env_name, (path, env_var) in env_list.items():
-        if os.getenv(env_var):
+        if env_var in os.environ:
             BASEPATH = path
             ENV = env_name
             break
@@ -409,7 +448,9 @@ def tempe():
             f"{BASEPATH}/temp/controlnet",
             f"{BASEPATH}/temp/svd",
             f"{BASEPATH}/temp/z123",
-            f"{BASEPATH}/temp/clip"
+            f"{BASEPATH}/temp/clip",
+            f"{BASEPATH}/temp/unet"
+            
         ]
 
     else:
@@ -419,7 +460,8 @@ def tempe():
             "/tmp/controlnet",
             "/tmp/svd",
             "/tmp/z123",
-            "/tmp/clip"
+            "/tmp/clip",
+            "/tmp/unet"
         ]
 
     for paths in tmplist:

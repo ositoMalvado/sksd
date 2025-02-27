@@ -1,20 +1,38 @@
 from IPython import get_ipython
 from pathlib import Path
-import sys, os
+import sys
+import os
 
-env, HOME = 'Unknown', None
-env_list = {'Colab': '/content', 'Kaggle': '/kaggle/working'}
-
-for env_name, path in env_list.items():
-    if os.getenv(env_name.upper() + '_JUPYTER_TRANSPORT') or os.getenv(env_name.upper() + '_DATA_PROXY_TOKEN'):
-        env, HOME = env_name, path
+ENVNAME, ENVBASE, ENVHOME = None, None, None
+env_list = {
+    'Colab': ('/content', '/content', 'COLAB_JUPYTER_TOKEN'),
+    'Kaggle': ('/kaggle', '/kaggle/working', 'KAGGLE_DATA_PROXY_TOKEN')
+}
+for envname, (envbase, envhome, envvar) in env_list.items():
+    if envvar in os.environ:
+        ENVNAME = envname
+        ENVBASE = envbase
+        ENVHOME = envhome
         break
 
-HOME = Path(HOME)
-SRC = HOME / 'ositoMalvado'
-MRK = SRC / 'marking.py'
-STR = Path('/root/.ipython/profile_default/startup')
+ROOT = Path.home()
+SRE = ROOT / 'GUTRIS1'
+BIN = str(SRE / 'bin')
+PKG = str(SRE / 'lib/python3.10/site-packages')
 
-sys.path.append(str(STR))
+MRK = Path(ENVHOME) / 'ositoMalvado/marking.py'
+STR = str(ROOT / '.ipython/profile_default/startup')
+
+iRON = os.environ
+
+sys.path.append(STR)
+
+if SRE.exists():
+    if BIN not in iRON["PATH"]:
+        iRON["PATH"] = BIN + ":" + iRON["PATH"]
+
+    if PKG not in iRON["PYTHONPATH"]:
+        iRON["PYTHONPATH"] = PKG + ":" + iRON["PYTHONPATH"]
+
 if MRK.exists():
-    get_ipython().run_line_magic('run', f'{MRK}')
+    get_ipython().run_line_magic('run', str(MRK))

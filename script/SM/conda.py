@@ -2,7 +2,9 @@ from IPython.display import display, HTML, clear_output, Image
 from IPython import get_ipython
 from ipywidgets import widgets
 from pathlib import Path
-import subprocess, json, shlex
+import subprocess
+import shlex
+import json
 
 home = Path.home()
 src = home / ".ositoMalvado"
@@ -24,66 +26,46 @@ GREEN = f"\033[38;5;35m{T}"
 
 Path(src).mkdir(parents=True, exist_ok=True)
 
-scripts = [
-    f"curl -sLo {pantat} https://github.com/ositoMalvado/sksd/raw/main/script/SM/pantat88.py",
-    f"curl -sLo {css} https://github.com/ositoMalvado/sksd/raw/main/script/SM/pantat88.css",
-    f"curl -sLo {nenen} https://github.com/ositoMalvado/sksd/raw/main/script/SM/nenen88.py",
-    f"curl -sLo {startup}/00-startup.py https://github.com/ositoMalvado/sksd/raw/main/script/SM/00-startup.py",
-    f"curl -sLo {startup}/util.py https://github.com/ositoMalvado/sksd/raw/main/script/SM/util.py",
-    f"curl -sLo {img} https://github.com/ositoMalvado/sksd/raw/main/script/SM/loading.png",
-    f"curl -sLo {startup}/cupang.py https://github.com/ositoMalvado/sksd/raw/main/script/SM/cupang.py"
-]
-
-for items in scripts:
-    subprocess.run(shlex.split(items), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+SyS = get_ipython().system
 
 main_output = widgets.Output()
 
-save_button = widgets.Button(description="Guardar")
+save_button = widgets.Button(description="Save")
 save_button.add_class("save-button")
 
-civitai_key_box = widgets.Text(placeholder='Ingresa Tu Civitai API Key Aqui', layout=widgets.Layout(width='350px'))
+civitai_key_box = widgets.Text(placeholder='Enter Your Civitai API Key Here', layout=widgets.Layout(width='350px'))
 civitai_key_box.add_class("api-input")
 
-hf_token_box = widgets.Text(placeholder='Huggingface READ \Token (opcional\)', layout=widgets.Layout(width='350px'))
+hf_token_box = widgets.Text(placeholder='Huggingface READ Token (optional)', layout=widgets.Layout(width='350px'))
 hf_token_box.add_class("api-input")
 
 input_widget = widgets.Box(
-    [civitai_key_box, hf_token_box, save_button], layout=widgets.Layout(
+    [civitai_key_box, hf_token_box, save_button], 
+    layout=widgets.Layout(
         width='500px',
         height='200px',
         display='flex',
         flex_flow='column',
         align_items='center',
         justify_content='space-around',
-        padding='10px'))
+        padding='10px'
+    )
+)
 input_widget.add_class("boxs")
 
-def zrok_install():
-    zrok = home / ".zrok/bin"
-    if zrok.exists():
-        return
-
-    zrok.mkdir(parents=True, exist_ok=True)
-    url = "https://github.com/openziti/zrok/releases/download/v0.4.32/zrok_0.4.32_linux_amd64.tar.gz"
-    name = zrok / Path(url).name
-
-    get_ipython().system(f"curl -sLo {name} {url}")
-    get_ipython().system(f"tar -xzf {name} -C {zrok} --wildcards *zrok")
-    get_ipython().system(f"rm -rf {home}/.cache/* {name}")
-
-def conda_install():
+def CondaInstall():
     try:
         display(Image(filename=str(img)))
 
         cmd_list = [
             (f'rm -rf {home}/.condarc', None),
-            ('conda install --repodata-fn repodata.json -qyc conda-forge conda', f'{BLUE} Instalando Anaconda'),
-            ('conda install --repodata-fn repodata.json -qyc conda-forge python=3.10.13', f'{CYAN} Instalando Python 3.10.13'),
-            ('conda install -qyc conda-forge glib gperftools openssh pv', f'{PURPLE} Instalando Conda Packages'),
-            ('pip install -q psutil aria2 gdown', f'{PINK} Instalando Python Packages'),
-            ('conda clean -qy --all', None),
-            (f'rm -rf {home}/.cache/*', None)
+            ('conda config --add channels conda-forge', None),
+            ('conda install -qy mamba', f'{BLUE} Installing Anaconda'),
+            ('mamba install -y conda', None),
+            ('mamba install -y python=3.10.13', f'{CYAN} Installing Python 3.10'),
+            ('mamba install -y glib gperftools openssh pv gputil curl', f'{PURPLE} Installing Conda Packages'),
+            ('pip install psutil aria2 gdown', f'{PINK} Installing Python Packages'),
+            ('conda clean -qy --all', None)
         ]
 
         for cmd, msg in cmd_list:
@@ -91,27 +73,29 @@ def conda_install():
                 print(msg)
             subprocess.run(shlex.split(cmd), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
-        zrok_install()
-
+        SyS(f'rm -rf {home}/.cache/* {home}/.condarc')
         clear_output()
-        print(f"{GREEN} Listo")
+        print(f"{GREEN} Done")
 
         get_ipython().kernel.do_shutdown(True)
 
     except KeyboardInterrupt:
         clear_output()
-        print("^ Cancelado")
+        print("^ Canceled")
 
-def load_css():
-    with open(css, "r") as file:
-        panel = file.read()
-    display(HTML(f"<style>{panel}</style>"))
+def LoadCSS(): 
+    display(HTML(f"<style>{open(css).read()}</style>"))
 
-def key_inject(civitai_key, hf_token):
+def KeyInject(civitai_key, hf_token):
+    for sc in [
+        f'curl -sLo {pantat} https://github.com/ositoMalvado/sksd/raw/main/script/SM/pantat88.py',
+        f'curl -sLo {nenen} https://github.com/ositoMalvado/sksd/raw/main/script/SM/nenen88.py'
+    ]: SyS(sc)
+
     target = [pantat, nenen]
 
     for line in target:
-        with open(line, "r") as file:
+        with open(line, 'r') as file:
             v = file.read()
 
         v = v.replace('toket = ""', f'toket = "{civitai_key}"')
@@ -120,21 +104,21 @@ def key_inject(civitai_key, hf_token):
         with open(line, "w") as file:
             file.write(v)
 
-def key_widget(civitai_key='', hf_token=''):
+def KeyWidget(civitai_key='', hf_token=''):
     civitai_key_box.value = civitai_key
     hf_token_box.value = hf_token
 
-    def key_input(b):
+    def KeyInputs(b):
         civitai_key = civitai_key_box.value.strip()
         hf_token = hf_token_box.value.strip()
 
         with main_output:
             if not civitai_key:
-                print("Por favor ingresa tu Civitai API Key")
+                print("Please enter your Civitai API Key")
                 return
 
             if len(civitai_key) < 32:
-                print("API key debe tener 32 caracteres")
+                print("API key must be at least 32 characters long")
                 return
 
             civitai_key_value = {"civitai-api-key": civitai_key}
@@ -144,7 +128,7 @@ def key_widget(civitai_key='', hf_token=''):
             with open(key_file, "w") as file:
                 json.dump(secrets, file, indent=4)
 
-        key_inject(civitai_key, hf_token)
+        KeyInject(civitai_key, hf_token)
 
         input_widget.close()
         main_output.clear_output()
@@ -152,17 +136,17 @@ def key_widget(civitai_key='', hf_token=''):
         p = subprocess.run(["conda", "--version"], capture_output=True, text=True, check=True)
         cv = p.stdout.strip().split()[1]
         mv = int(cv.split('.')[0])
-        
+
         with main_output:
             if mv < 24:
-                conda_install()
+                CondaInstall()
             else:
-                print(f"{GREEN} Listo")
+                print(f"{GREEN} Done")
                 get_ipython().kernel.do_shutdown(True)
 
-    save_button.on_click(key_input)
+    save_button.on_click(KeyInputs)
 
-def key_check():
+def KeyCheck():
     if key_file.exists():
         with open(key_file, "r") as file:
             value = json.load(file)
@@ -172,14 +156,24 @@ def key_check():
 
         if not civitai_key or not hf_token:
             display(input_widget, main_output)
-            key_widget(civitai_key, hf_token)
+            KeyWidget(civitai_key, hf_token)
         else:
-            key_inject(civitai_key, hf_token)
+            KeyInject(civitai_key, hf_token)
             display(main_output)
-            conda_install()
+            CondaInstall()
     else:
         display(input_widget, main_output)
-        key_widget()
+        KeyWidget()
 
-load_css()
-key_check()
+def CondaMisc():
+    for scr in [
+        f'curl -sLo {css} https://github.com/ositoMalvado/sksd/raw/main/script/SM/pantat88.css',
+        f'curl -sLo {startup}/00-startup.py https://github.com/ositoMalvado/sksd/raw/main/script/SM/00-startup.py',
+        f'curl -sLo {startup}/util.py https://github.com/ositoMalvado/sksd/raw/main/script/SM/util.py',
+        f'curl -sLo {img} https://github.com/ositoMalvado/sksd/raw/main/script/SM/loading.png',
+        f'curl -sLo {startup}/cupang.py https://github.com/ositoMalvado/sksd/raw/main/script/SM/cupang.py'
+    ]: SyS(scr)
+
+CondaMisc()
+LoadCSS()
+KeyCheck()

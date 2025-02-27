@@ -1,8 +1,1 @@
-__pycache__/
-*.gif
-*.jpg
-kaggle/
-.ipynb_checkpoints/
-pre/
-backup/
-ruplacer.exe
+replacer.txt

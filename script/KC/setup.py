@@ -1,380 +1,505 @@
 from IPython.display import display, Image, clear_output
 from IPython import get_ipython
 from pathlib import Path
-import argparse, sys, json, os, subprocess, shlex, time
+import subprocess
+import argparse
+import shlex
+import json
+import sys
+import os
+import re
 
-R = "\033[31m"
-P = "\033[38;5;135m"
-RST = "\033[0m"
-
-IMG = "https://github.com/ositoMalvado/sksd/raw/main/script/SM/loading.png"
-display(Image(url=IMG))
-clear_output(wait=True)
-
-VALID_WEBUI_OPTIONS = ["A1111", "Forge", "ComfyUI", "ReForge"]
-VALID_SD_OPTIONS = ["1.5", "xl"]
-
-def prevent_silly():
-    full_args = ' '.join(sys.argv)
-
-    if '--webui' in full_args:
-        webui_value = full_args.split('--webui=')[1].split('--')[0].strip()
-        if ',' in webui_value:
-            print(f"{P}[{RST}{R}ERROR{RST}{P}]{RST} multiple values for --webui detected >> [{webui_value}] << provide only one valid option")
-            print(f"\navailable webui options: [{', '.join(VALID_WEBUI_OPTIONS)}]")
-            return None, None
-
-    if '--sd' in full_args:
-        sd_value = full_args.split('--sd=')[1].split('--')[0].strip()
-        if ',' in sd_value:
-            print(f"{P}[{RST}{R}ERROR{RST}{P}]{RST} multiple values for --sd detected >> [{sd_value}] << provide only one valid option")
-            print(f"\navailable sd options: [{', '.join(VALID_SD_OPTIONS)}]")
-            return None, None
-
-    parser = argparse.ArgumentParser(description="WebUI Installer Script for Kaggle and Google Colab")
-    parser.add_argument('--webui', required=True, help="available webui: A1111, Forge, ComfyUI, ReForge")
-    parser.add_argument('--sd', required=True, help="available sd: 1.5, xl")
-    parser.add_argument('--civitai_key', required=True, help="your CivitAI API key")
-    parser.add_argument('--hf_read_token', default=None, help="your Huggingface READ \Token (opcional\)")
-
-    args = parser.parse_args()
-
-    webui_input = args.webui.lower()
-    sd_input = args.sd.lower()
-
-    if not any(webui_input == option.lower() for option in VALID_WEBUI_OPTIONS):
-        print(f"invalid webui option: {args.webui}")
-        print(f"available webui options: {', '.join(VALID_WEBUI_OPTIONS)}")
-        return None, None
-
-    if not any(sd_input == option.lower() for option in VALID_SD_OPTIONS):
-        print(f"invalid sd option: {args.sd}")
-        print(f"available sd options: {', '.join(VALID_SD_OPTIONS)}")
-        return None, None
-
-    civitai_key = args.civitai_key.strip()
-    if not civitai_key:
-        print("Por favor ingresa tu CivitAI API key")
-        return None, None
-    if len(civitai_key) < 32:
-        print("API key debe tener 32 caracteres")
-        return None, None
-
-    hf_read_token = args.hf_read_token.strip()
-    if " " in hf_read_token:
-        hf_read_token = ""
-
-    webui_webui = next(option for option in VALID_WEBUI_OPTIONS if webui_input == option.lower())
-    sd_sd = next(option for option in VALID_SD_OPTIONS if sd_input == option.lower())
-
-    return (webui_webui, sd_sd), civitai_key, hf_read_token
-
+SyS = get_ipython().system
+CD = os.chdir
+iRON = os.environ
 
 ENVNAME, ENVBASE, ENVHOME = None, None, None
 env_list = {
-    'Colab': ('/content', '/content', 'COLAB_JUPYTER_TRANSPORT'),
+    'Colab': ('/content', '/content', 'COLAB_JUPYTER_TOKEN'),
     'Kaggle': ('/kaggle', '/kaggle/working', 'KAGGLE_DATA_PROXY_TOKEN')
 }
 for envname, (envbase, envhome, envvar) in env_list.items():
-    if os.getenv(envvar):
+    if envvar in iRON:
         ENVNAME = envname
         ENVBASE = envbase
         ENVHOME = envhome
         break
+
 if not ENVNAME:
     print("You are not in Kaggle or Google Colab.\nExiting.")
     sys.exit()
 
+RST = "\033[0m"
+R = "\033[31m"
+P = "\033[38;5;135m"
+ORANGE = "\033[38;5;208m"
+AR = f'{ORANGE}▶{RST}'
+ERR = f"{P}[{RST}{R}ERROR{RST}{P}]{RST}"
+IMG = "https://github.com/ositoMalvado/sksd/raw/main/script/SM/loading.png"
+
+ROOT = Path.home()
+SRE = ROOT / 'GUTRIS1'
+BIN = str(SRE / 'bin')
+PKG = str(SRE / 'lib/python3.10/site-packages')
+
 HOME = Path(ENVHOME)
 BASEPATH = Path(ENVBASE)
-tmp = BASEPATH / 'temp'
-vnv = BASEPATH / 'venv'
+TMP = BASEPATH / 'temp'
+VNV = BASEPATH / 'venv'
 
 SRC = HOME / 'ositoMalvado'
 MRK = SRC / 'marking.py'
 KEY = SRC / 'api-key.json'
 MARKED = SRC / 'marking.json'
 
-STR = Path('/root/.ipython/profile_default/startup')
-nenen = STR / "nenen88.py"
-pantat = STR / "pantat88.py"
+USR = Path('/usr/bin')
+STR = ROOT / '.ipython/profile_default/startup'
+nenen = STR / 'nenen88.py'
+pantat = STR / 'pantat88.py'
 KANDANG = STR / 'KANDANG.py'
 
-tmp.mkdir(parents=True, exist_ok=True)
+TMP.mkdir(parents=True, exist_ok=True)
 SRC.mkdir(parents=True, exist_ok=True)
 
-with open(KANDANG, 'w') as file:
-    file.write(f"ENVNAME = '{ENVNAME}'\n")
-    file.write(f"HOMEPATH = '{HOME}'\n")
-    file.write(f"TEMPPATH = '{tmp}'\n")
-    file.write(f"VENVPATH = '{vnv}'\n")
-    file.write(f"BASEPATH = '{BASEPATH}'\n")
+VALID_WEBUI_OPTIONS = ["A1111", "Forge", "ComfyUI", "ReForge", "SwarmUI"]
+VALID_SD_OPTIONS = ["1.5", "xl"]
 
-def marking(path, fn, ui):
-    txt = path / fn
-    values = {'ui': ui, 'launch_args1': '', 'launch_args2': '', 'tunnel': ''}
+def prevent_silly():
+    parser = argparse.ArgumentParser(description="WebUI Installer Script for Kaggle and Google Colab")
+    parser.add_argument('--webui', required=True, help="available webui: A1111, Forge, ComfyUI, ReForge, SwarmUI")
+    parser.add_argument('--sd', required=True, help="available sd: 1.5, xl")
+    parser.add_argument('--civitai_key', required=True, help="your CivitAI API key")
+    parser.add_argument('--hf_read_token', default=None, help="your Huggingface READ Token (optional)")
 
-    if not txt.exists():
-        with open(txt, 'w') as file:
-            json.dump(values, file, indent=4)
+    args = parser.parse_args()
 
-    with open(txt, 'r') as file:
-        data = json.load(file)
+    arg1 = args.webui.lower()
+    arg2 = args.sd.lower()
+    arg3 = args.civitai_key.strip()
+    arg4 = args.hf_read_token.strip() if args.hf_read_token else ""
 
-    data.update(values)
-    with open(txt, 'w') as file:
-        json.dump(data, file, indent=4)
+    if not any(arg1 == option.lower() for option in VALID_WEBUI_OPTIONS):
+        print(f"{ERR}: invalid webui option: '{args.webui}'")
+        print(f"Available webui options: {', '.join(VALID_WEBUI_OPTIONS)}")
+        return None, None, None
 
-def key_inject(civitai_key, hf_read_token):
-    target = [pantat, nenen]
+    if not any(arg2 == option.lower() for option in VALID_SD_OPTIONS):
+        print(f"{ERR}: invalid sd option: '{args.sd}'")
+        print(f"Available sd options: {', '.join(VALID_SD_OPTIONS)}")
+        return None, None, None
 
-    for line in target:
-        with open(line, "r") as file:
-            v = file.read()
+    if not arg3:
+        print(f"{ERR}: CivitAI API key is missing.")
+        return None, None, None
+    if re.search(r'\s+', arg3):
+        print(f"{ERR}: CivitAI API key contains spaces '{arg3}' - not allowed.")
+        return None, None, None
+    if len(arg3) < 32:
+        print(f"{ERR}: CivitAI API key must be at least 32 characters long.")
+        return None, None, None
 
-        v = v.replace('toket = ""', f'toket = "{civitai_key}"')
-        v = v.replace('tobrut = ""', f'tobrut = "{hf_read_token}"')
+    if not arg4:
+        arg4 = ""
+    if re.search(r'\s+', arg4):
+        arg4 = ""
 
-        with open(line, "w") as file:
-            file.write(v)
-
-def sym_link(ui, WEBUI):
-    if ui == 'A1111':
-        return [
-            f"rm -rf {tmp}/*",
-            f"rm -rf {WEBUI}/models/Stable-diffusion/tmp_ckpt {WEBUI}/models/Lora/tmp_lora {WEBUI}/models/ControlNet",
-            f"mkdir -p {WEBUI}/models/Lora {WEBUI}/models/ESRGAN",
-            f"ln -vs {tmp}/ckpt {WEBUI}/models/Stable-diffusion/tmp_ckpt",
-            f"ln -vs {tmp}/lora {WEBUI}/models/Lora/tmp_lora",
-            f"ln -vs {tmp}/controlnet {WEBUI}/models/ControlNet"
-        ]
-
-    elif ui == 'ComfyUI':
-        return [
-            f"rm -rf {tmp}/*",
-            f"rm -rf {WEBUI}/models/checkpoints/tmp_ckpt {WEBUI}/models/loras/tmp_lora",
-            f"rm -rf {WEBUI}/models/controlnet {WEBUI}/models/clip",
-            f"ln -vs {tmp}/ckpt {WEBUI}/models/checkpoints/tmp_ckpt",
-            f"ln -vs {tmp}/lora {WEBUI}/models/loras/tmp_lora",
-            f"ln -vs {tmp}/controlnet {WEBUI}/models/controlnet",
-            f"ln -vs {tmp}/clip {WEBUI}/models/clip",
-            f"ln -vs {WEBUI}/models/checkpoints {WEBUI}/models/checkpoints_symlink"
-        ]
-
-    elif ui in ['Forge', 'ReForge']:
-        return [
-            f"rm -rf {tmp}/*",
-            f"rm -rf {WEBUI}/models/Stable-diffusion/tmp_ckpt {WEBUI}/models/Lora/tmp_lora",
-            f"rm -rf {WEBUI}/models/ControlNet {WEBUI}/models/svd {WEBUI}/models/z123",
-            f"mkdir -p {WEBUI}/models/Lora {WEBUI}/models/ESRGAN",
-            f"ln -vs {tmp}/ckpt {WEBUI}/models/Stable-diffusion/tmp_ckpt",
-            f"ln -vs {tmp}/lora {WEBUI}/models/Lora/tmp_lora",
-            f"ln -vs {tmp}/controlnet {WEBUI}/models/ControlNet",
-            f"ln -vs {tmp}/z123 {WEBUI}/models/z123",
-            f"ln -vs {tmp}/svd {WEBUI}/models/svd"
-        ]
+    webui_webui = next(option for option in VALID_WEBUI_OPTIONS if arg1 == option.lower())
+    sd_sd = next(option for option in VALID_SD_OPTIONS if arg2 == option.lower())
+    return (webui_webui, sd_sd), arg3, arg4
 
 
-def webui_req(ui, WEBUI):
-    from nenen88 import pull, download
+def PythonPortable():
+    CD(ROOT)
+    SyS('sudo apt-get -qq -y install aria2 pv lz4')
+    clear_output(wait=True)
 
-    if ui == 'A1111':
-        pull(f"https://github.com/ositoMalvado/sksd a1111 {WEBUI}")
-    elif ui == 'Forge':
-        pull(f"https://github.com/ositoMalvado/sksd forge {WEBUI}")
-    elif ui == 'ComfyUI':
-        pull(f"https://github.com/ositoMalvado/sksd comfyui {WEBUI}")
-    elif ui == 'ReForge':
-        pull(f"https://github.com/ositoMalvado/sksd reforge {WEBUI}")
+    url = "https://huggingface.co/pantat88/back_up/resolve/main/python310-torch251-cu121.tar.lz4"
+    fn = Path(url).name
 
-    os.chdir(WEBUI)
-    req = sym_link(ui, WEBUI)
+    aria = f'aria2c --console-log-level=error --stderr=true -c -x16 -s16 -k1M -j5 {url} -o {fn}'
+    pv = f'pv {fn} | lz4 -d | tar -xf -'
 
-    for lines in req:
-        subprocess.run(shlex.split(lines), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    Aria2Sub(aria)
+
+    if ENVNAME == "Kaggle":
+        for cmd in [
+            'pip install ipywidgets jupyterlab_widgets --upgrade',
+            'rm -f /usr/lib/python3.10/sitecustomize.py'
+        ]: SyS(f'{cmd}>/dev/null 2>&1')
+    else:
+        print(f'\n{AR} installing Python...')
+
+    SyS(pv)
+    Path(ROOT / fn).unlink()
+
+    if BIN not in iRON["PATH"]:
+        iRON["PATH"] = BIN + ":" + iRON["PATH"]
+
+    if PKG not in iRON["PYTHONPATH"]:
+        iRON["PYTHONPATH"] = PKG + ":" + iRON["PYTHONPATH"]
+
+
+def Aria2Sub(cmd):
+    Aria2Process = subprocess.Popen(
+        shlex.split(cmd),
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True
+    )
+    result = ""
+    br = False
+    while True:
+        lines = Aria2Process.stderr.readline()
+        if lines == '' and Aria2Process.poll() is not None:
+            break
+        if lines:
+            result += lines
+            for outputs in lines.splitlines():
+                if re.match(r'\[#\w{6}\s.*\]', outputs):
+                    lines = outputs.splitlines()
+                    for line in lines:
+                        print(f"\r{' '*500}\r {line}", end="")
+                        sys.stdout.flush()
+                    br = True
+                    break
+    if br:
+        print()
+    stripe = result.find("======+====+===========")
+    if stripe:
+        for lines in result[stripe:].splitlines():
+            if '|' in lines and 'OK' in lines:
+                print(f"  {lines}")
+    Aria2Process.wait()
+
+
+def install_tunnel():
+    SyS(f'wget -qO {USR}/cl https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64')
+    SyS(f'chmod +x {USR}/cl')
+
+    bins = {
+        "zrok": {
+            "bin": USR / 'zrok',
+            "url": "https://github.com/openziti/zrok/releases/download/v0.4.44/zrok_0.4.44_linux_amd64.tar.gz"
+        },
+        "ngrok": {
+            "bin": USR / 'ngrok',
+            "url": "https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz"
+        }
+    }
+
+    for n, b in bins.items():
+        if b["bin"].exists():
+            continue
+
+        url = b["url"]
+        name = Path(url).name
+
+        SyS(f"wget -qO {name} {url}")
+        SyS(f"tar -xzf {name} -C {USR}")
+        SyS(f"rm -f {name}")
+
+
+def saving():
+    j = {
+        "ENVNAME": ENVNAME,
+        "HOMEPATH": HOME,
+        "TEMPPATH": TMP,
+        "VENVPATH": VNV,
+        "BASEPATH": BASEPATH
+    }
+
+    with open(KANDANG, 'w') as q:
+        for k, v in j.items():
+            q.write(f"{k} = '{v}'\n")
+
+
+def marking(p, n, u):
+    t = p / n
+    v = {'ui': u, 'launch_args': '', 'tunnel': ''}
+
+    if not t.exists():
+        with open(t, 'w') as f:
+            json.dump(v, f, indent=4)
+
+    with open(t, 'r') as f:
+        d = json.load(f)
+
+    d.update(v)
+    with open(t, 'w') as f:
+        json.dump(d, f, indent=4)
+
+
+def key_inject(C, H):
+    t = [pantat, nenen]
+
+    for l in t:
+        with open(l, "r") as w:
+            v = w.read()
+
+        v = v.replace('toket = ""', f'toket = "{C}"')
+        v = v.replace('tobrut = ""', f'tobrut = "{H}"')
+
+        with open(l, "w") as b:
+            b.write(v)
+
+
+def sym_link(U, M):
+    configs = {
+        'A1111': {
+            'pre': [
+                f'rm -rf {M / "Stable-diffusion/tmp_ckpt"} {M / "Lora/tmp_lora"} {M / "ControlNet"} {TMP}/*'
+            ],
+            'links': [
+                (TMP / "ckpt", M / "Stable-diffusion/tmp_ckpt"),
+                (TMP / "lora", M / "Lora/tmp_lora"),
+                (TMP / "controlnet", M / "ControlNet")
+            ]
+        },
+
+        'ReForge': {
+            'pre': [
+                f'rm -rf {M / "Stable-diffusion/tmp_ckpt"} {M / "Lora/tmp_lora"} {M / "ControlNet"}',
+                f'rm -rf {M / "svd"} {M / "z123"} {TMP}/*'
+            ],
+            'links': [
+                (TMP / "ckpt", M / "Stable-diffusion/tmp_ckpt"),
+                (TMP / "lora", M / "Lora/tmp_lora"),
+                (TMP / "controlnet", M / "ControlNet"),
+                (TMP / "z123", M / "z123"),
+                (TMP / "svd", M / "svd")
+            ]
+        },
+
+        'Forge': {
+            'pre': [
+                f'rm -rf {M / "Stable-diffusion/tmp_ckpt"} {M / "Lora/tmp_lora"} {M / "ControlNet"}',
+                f'rm -rf {M / "svd"} {M / "z123"} {M / "clip"} {M / "unet"} {TMP}/*'
+            ],
+            'links': [
+                (TMP / "ckpt", M / "Stable-diffusion/tmp_ckpt"),
+                (TMP / "lora", M / "Lora/tmp_lora"),
+                (TMP / "controlnet", M / "ControlNet"),
+                (TMP / "z123", M / "z123"),
+                (TMP / "svd", M / "svd"),
+                (TMP / "clip", M / "clip"),
+                (TMP / "unet", M / "unet")
+            ]
+        },
+
+        'ComfyUI': {
+            'pre': [
+                f'rm -rf {M / "checkpoints/tmp_ckpt"} {M / "loras/tmp_lora"} {M / "controlnet"}',
+                f'rm -rf {M / "clip"} {M / "unet"} {TMP}/*'
+            ],
+            'links': [
+                (TMP / "ckpt", M / "checkpoints/tmp_ckpt"),
+                (TMP / "lora", M / "loras/tmp_lora"),
+                (TMP / "controlnet", M / "controlnet"),
+                (TMP / "clip", M / "clip"),
+                (TMP / "unet", M / "unet"),
+                (M / "checkpoints", M / "checkpoints_symlink")
+            ]
+        },
+
+        'SwarmUI': {
+            'pre': [
+                f'rm -rf {M / "Stable-Diffusion/tmp_ckpt"} {M / "Lora/tmp_lora"} {M / "controlnet"}',
+                f'rm -rf {M / "clip"} {M / "unet"} {TMP}/*'
+            ],
+            'links': [
+                (TMP / "ckpt", M / "Stable-Diffusion/tmp_ckpt"),
+                (TMP / "lora", M / "Lora/tmp_lora"),
+                (TMP / "controlnet", M / "controlnet"),
+                (TMP / "clip", M / "clip"),
+                (TMP / "unet", M / "unet")
+            ]
+        }
+    }
+
+    cfg = configs.get(U)
+    [SyS(f'{cmd}') for cmd in cfg['pre']]
+
+    if U in ['A1111', 'Forge', 'ReForge']:
+        [(M / d).mkdir(parents=True, exist_ok=True) for d in ["Lora", "ESRGAN"]]
+
+    [SyS(f'ln -s {src} {tg}') for src, tg in cfg['links']]
+
+
+def webui_req(U, W, M):
+    CD(W)
+
+    if U in ['A1111', 'Forge', 'ComfyUI', 'ReForge']:
+        pull(f"https://github.com/ositoMalvado/sksd {U.lower()} {W}")
+    elif U == 'SwarmUI':
+        M.mkdir(parents=True, exist_ok=True)
+        for sub in ['Stable-Diffusion', 'Lora', 'Embeddings', 'VAE', 'upscale_models']:
+            (M / sub).mkdir(parents=True, exist_ok=True)
+
+        download(f"https://dot.net/v1/dotnet-install.sh {W}")
+        dotnet = W / 'dotnet-install.sh'
+        dotnet.chmod(0o755)
+        SyS("bash ./dotnet-install.sh --channel 8.0")
+
+    sym_link(U, M)
+    install_tunnel()
 
     scripts = [
-        f"https://github.com/ositoMalvado/sksd/raw/main/script/KC/controlnet.py {WEBUI}/asd",
-        f"https://github.com/ositoMalvado/sksd/raw/main/script/KC/venv.py {WEBUI}",
-        f"https://github.com/ositoMalvado/sksd/raw/main/script/KC/sksd.py {WEBUI}"
+        f"https://github.com/ositoMalvado/sksd/raw/main/script/SM/controlnet.py {W}/asd",
+        f"https://github.com/ositoMalvado/sksd/raw/main/script/KC/sksd.py {W}"
     ]
 
-    upscalers_path = f"{WEBUI}/models/upscale_models" if ui == 'ComfyUI' else f"{WEBUI}/models/ESRGAN"
+    u = M / 'upscale_models' if U in ['ComfyUI', 'SwarmUI'] else M / 'ESRGAN'
     upscalers = [
-        f"https://huggingface.co/pantat88/ui/resolve/main/4x-UltraSharp.pth {upscalers_path}",
-        f"https://huggingface.co/pantat88/ui/resolve/main/4x-AnimeSharp.pth {upscalers_path}",
-        f"https://huggingface.co/pantat88/ui/resolve/main/4x_NMKD-Superscale-SP_178000_G.pth {upscalers_path}",
-        f"https://huggingface.co/pantat88/ui/resolve/main/4x_RealisticRescaler_100000_G.pth {upscalers_path}",
-        f"https://huggingface.co/pantat88/ui/resolve/main/8x_RealESRGAN.pth {upscalers_path}",
-        f"https://huggingface.co/pantat88/ui/resolve/main/4x_foolhardy_Remacri.pth {upscalers_path}"
+        f"https://huggingface.co/pantat88/ui/resolve/main/4x-UltraSharp.pth {u}",
+        f"https://huggingface.co/pantat88/ui/resolve/main/4x-AnimeSharp.pth {u}",
+        f"https://huggingface.co/pantat88/ui/resolve/main/4x_NMKD-Superscale-SP_178000_G.pth {u}",
+        f"https://huggingface.co/uwg/upscaler/resolve/main/ESRGAN/8x_NMKD-Superscale_150000_G.pth {u}",
+        f"https://huggingface.co/pantat88/ui/resolve/main/4x_RealisticRescaler_100000_G.pth {u}",
+        f"https://huggingface.co/pantat88/ui/resolve/main/8x_RealESRGAN.pth {u}",
+        f"https://huggingface.co/pantat88/ui/resolve/main/4x_foolhardy_Remacri.pth {u}",
+        f"https://huggingface.co/subby2006/NMKD-YandereNeoXL/resolve/main/4x_NMKD-YandereNeoXL_200k.pth {u}",
+        f"https://huggingface.co/subby2006/NMKD-UltraYandere/resolve/main/4x_NMKD-UltraYandere_300k.pth {u}"
     ]
 
     line = scripts + upscalers
-    for item in line:
-        download(item)
+    for item in line: download(item)
+
+    if U not in ['SwarmUI', 'ComfyUI']:
+        SyS(f'rm -f {W}/html/card-no-preview.png')
+        download(f'https://huggingface.co/pantat88/ui/resolve/main/card-no-preview.png {W}/html')
 
 
-def Extensions(ui, WEBUI):
-    from nenen88 import clone, say, download
+def webui_extension(U, W, M):
+    EXT = W / "custom_nodes" if U == 'ComfyUI' else W / "extensions"
+    CD(EXT)
 
-    if ui == 'ComfyUI':
-        say("<br><b>【{red} Instalando Custom Nodes{d} 】{red}</b>")
-        os.chdir(WEBUI / "custom_nodes")
-        clone(str(WEBUI / "asd/custom_nodes.txt"))
+    if U == 'ComfyUI':
+        say("<br><b>【{red} Installing Custom Nodes{d} 】{red}</b>")
+        clone(str(W / "asd/custom_nodes.txt"))
         print()
 
-        custom_nodes_models = [
-            f"https://github.com/sczhou/CodeFormer/releases/download/v0.1.0/codeformer.pth {WEBUI}/models/facerestore_models",
-            f"https://github.com/TencentARC/GFPGAN/releases/download/v1.3.4/GFPGANv1.4.pth {WEBUI}/models/facerestore_models"
-        ]
-
-        for item in custom_nodes_models:
-            download(item)
+        for faces in [
+            f"https://github.com/sczhou/CodeFormer/releases/download/v0.1.0/codeformer.pth {M}/facerestore_models",
+            f"https://github.com/TencentARC/GFPGAN/releases/download/v1.3.4/GFPGANv1.4.pth {M}/facerestore_models"
+        ]: download(faces)
 
     else:
-        say("<br><b>【{red} Instalando Extensions{d} 】{red}</b>")
-        os.chdir(WEBUI / "extensions")
-        clone(str(WEBUI / "asd/extension.txt"))
-        get_ipython().system("git clone -q https://github.com/gutris1/sd-encrypt-image")
+        say("<br><b>【{red} Installing Extensions{d} 】{red}</b>")
+        clone(str(W / "asd/extension.txt"))
+
+        if ENVNAME == 'Kaggle':
+            clone('https://github.com/gutris1/sd-civitai-browser-plus-plus')
+        else:
+            clone('https://github.com/BlafKing/sd-civitai-browser-plus')
 
 
-def installing_webui(ui, which_sd, WEBUI, EMB, VAE):
-    from nenen88 import download
-    webui_req(ui, WEBUI)
+def webui_installation(U, S, W, M, E, V):
+    webui_req(U, W, M)
 
-    if which_sd == "1.5":
-        embzip = f"{WEBUI}/embeddings.zip"
+    if S == "xl":
+        embzip = W / 'embeddingsXL.zip'
         extras = [
-            f"https://huggingface.co/pantat88/ui/resolve/main/embeddings.zip {WEBUI}",
-            f"https://huggingface.co/stabilityai/sd-vae-ft-mse-original/resolve/main/vae-ft-mse-840000-ema-pruned.safetensors {VAE}"
+            f"https://huggingface.co/pantat88/ui/resolve/main/embeddingsXL.zip {W}",
+            f"https://huggingface.co/madebyollin/sdxl-vae-fp16-fix/resolve/main/sdxl.vae.safetensors {V} sdxl_vae.safetensors"
         ]
 
-    elif which_sd == "xl":
-        embzip = None
+    else:
+        embzip =  W / 'embeddings.zip'
         extras = [
-            f"https://civitai.com/api/download/models/403492 {EMB}",
-            f"https://civitai.com/api/download/models/182974 {EMB}",
-            f"https://civitai.com/api/download/models/159385 {EMB}",
-            f"https://civitai.com/api/download/models/159184 {EMB}",
-            f"https://huggingface.co/stabilityai/sdxl-vae/resolve/main/sdxl_vae.safetensors {VAE}"
+            f"https://huggingface.co/pantat88/ui/resolve/main/embeddings.zip {W}",
+            f"https://huggingface.co/stabilityai/sd-vae-ft-mse-original/resolve/main/vae-ft-mse-840000-ema-pruned.safetensors {V}"
         ]
 
-    for item in extras:
-        download(item)
+    for item in extras: download(item)
 
-    if which_sd == "1.5":
-        get_ipython().system(f"unzip -qo {embzip} -d {EMB} && rm {embzip}")
+    SyS(f"unzip -qo {embzip} -d {E} && rm {embzip}")
 
-    Extensions(ui, WEBUI)
+    if U != 'SwarmUI': webui_extension(U, W, M)
 
 
-def webui_install(ui, which_sd):
-    from nenen88 import say, tempe
+def webui_selection(ui, which_sd):
+    repo_url = {
+        'A1111': 'https://github.com/AUTOMATIC1111/stable-diffusion-webui A1111',
+        'Forge': 'https://github.com/lllyasviel/stable-diffusion-webui-forge Forge',
+        'ComfyUI': 'https://github.com/comfyanonymous/ComfyUI',
+        'ReForge': 'https://github.com/Panchovix/stable-diffusion-webui-reForge ReForge',
+        'SwarmUI': 'https://github.com/mcmonkeyprojects/SwarmUI'
+    }
 
-    if ui == 'A1111':
-        WEBUI = HOME / 'A1111'
-        repo = f'git clone -q -b {version} https://github.com/gutris1/A1111'
-        say("<b>【{red} Instalando A1111{d} 】{red}</b>")
+    if ui in repo_url:
+        WEBUI = HOME / ui
+        repo = repo_url[ui]
 
-    elif ui == 'Forge':
-        WEBUI = HOME / 'Forge'
-        repo = f'git clone -q https://github.com/lllyasviel/stable-diffusion-webui-forge Forge'
-        say("<b>【{red} Instalando Forge{d} 】{red}</b>")
+    MODELS = WEBUI / 'Models' if ui == 'SwarmUI' else WEBUI / 'models'
+    EMB = MODELS / 'Embeddings' if ui == 'SwarmUI' else (MODELS / 'embeddings' if ui == 'ComfyUI' else WEBUI / 'embeddings')
+    VAE = MODELS / 'vae' if ui == 'ComfyUI' else MODELS / 'VAE'
 
-    elif ui == 'ComfyUI':
-        WEBUI = HOME / 'ComfyUI'
-        repo = f'git clone -q https://github.com/comfyanonymous/ComfyUI'
-        say("<b>【{red} Instalando ComfyUI{d} 】{red}</b>")
+    say(f"<b>【{{red}} Installing {WEBUI.name}{{d}} 】{{red}}</b>")
+    clone(repo)
 
-    elif ui == 'ReForge':
-        WEBUI = HOME / 'ReForge'
-        repo = f'git clone -q https://github.com/Panchovix/stable-diffusion-webui-reForge ReForge'
-        say("<b>【{red} Instalando ReForge{d} 】{red}</b>")
+    webui_installation(ui, which_sd, WEBUI, MODELS, EMB, VAE)
 
-    EMB = f"{WEBUI}/models/embeddings" if ui == 'ComfyUI' else f"{WEBUI}/embeddings"
-    VAE = f"{WEBUI}/models/vae" if ui == 'ComfyUI' else f"{WEBUI}/models/VAE"
-
-    req_list = [
-        "curl -Lo /usr/bin/cl https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64",
-        "apt -y install pv",
-        "pip install -q gdown aria2",
-        "chmod +x /usr/bin/cl"
-    ]
-
-    for items in req_list:
-        subprocess.run(shlex.split(items), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-
-    get_ipython().system(f"{repo}")
-    time.sleep(1)
-    installing_webui(ui, which_sd, WEBUI, EMB, VAE)
-
-    get_ipython().run_line_magic('run', f'{MRK}')
-    get_ipython().run_line_magic('run', f'{WEBUI}/venv.py')
-
-    say("<br><b>【{red} Listo{d} 】{red}</b>")
-
+    say("<br><b>【{red} Done{d} 】{red}</b>")
     tempe()
-    os.chdir(HOME)
-    get_ipython().kernel.do_shutdown(True)
+    CD(HOME)
 
 
-def lets_go():
-    args, civitai_key, hf_read_token = prevent_silly()
-    if args is None or civitai_key is None:
-        return
-    webui, sd = args
-
-    z = [
-        (STR / '00-startup.py', f"curl -sLo {STR}/00-startup.py https://github.com/ositoMalvado/sksd/raw/main/script/KC/00-startup.py"),
-        (pantat, f"curl -sLo {pantat} https://github.com/ositoMalvado/sksd/raw/main/script/SM/pantat88.py"),
-        (nenen, f"curl -sLo {nenen} https://github.com/ositoMalvado/sksd/raw/main/script/SM/nenen88.py"),
-        (STR / 'cupang.py', f"curl -sLo {STR}/cupang.py https://github.com/ositoMalvado/sksd/raw/main/script/KC/cupang.py"),
-        (MRK, f"curl -sLo {MRK} https://github.com/ositoMalvado/sksd/raw/main/script/KC/marking.py")
-    ]
-
-    for x, y in z:
-        if not Path(x).exists():
-            get_ipython().system(y)
-
+def webui_checker():
     config = json.load(MARKED.open('r')) if MARKED.exists() else {}
     ui = config.get('ui')
     WEBUI = HOME / ui if ui else None
 
     if WEBUI is not None and WEBUI.exists():
         git_dir = WEBUI / '.git'
-
         if git_dir.exists():
-            os.chdir(WEBUI)
-            commit_hash = subprocess.check_output(['git', 'rev-parse', 'HEAD']).strip().decode('utf-8')
-
-            if ui == 'A1111':
-                if commit_hash != version:
-                    get_ipython().system(f"git pull origin {version}")
-                    get_ipython().system("git fetch --tags")
-
-            elif ui == 'ComfyUI':
-                get_ipython().system("git pull origin master")
-                get_ipython().system("git fetch --tags")
-
+            CD(WEBUI)
+            if ui in ['A1111', 'ComfyUI', 'SwarmUI']:
+                SyS("git pull origin master")
             elif ui in ['Forge', 'ReForge']:
-                get_ipython().system("git pull origin main")
-                get_ipython().system("git fetch --tags")
+                SyS("git pull origin main")
 
     else:
-        display(Image(url=IMG))
-        sys.path.append(str(STR))
-        get_ipython().run_line_magic('run', f'{nenen}')
-        get_ipython().run_line_magic('run', f'{KANDANG}')
-
-        marking(SRC, MARKED, webui)
-        key_inject(civitai_key, hf_read_token)
-
         try:
-            webui_install(webui, sd)
+            webui_selection(webui, sd)
         except KeyboardInterrupt:
-            print("\nCancelado.")
+            print("\nCanceled.")
 
 
-version = 'v1.10.1'
-os.chdir(HOME)
-lets_go()
+def webui_misc():
+    z = [
+        (STR / '00-startup.py', f"wget -qO {STR}/00-startup.py https://github.com/ositoMalvado/sksd/raw/main/script/KC/00-startup.py"),
+        (pantat, f"wget -qO {pantat} https://github.com/ositoMalvado/sksd/raw/main/script/SM/pantat88.py"),
+        (nenen, f"wget -qO {nenen} https://github.com/ositoMalvado/sksd/raw/main/script/SM/nenen88.py"),
+        (STR / 'cupang.py', f"wget -qO {STR}/cupang.py https://github.com/ositoMalvado/sksd/raw/main/script/SM/cupang.py"),
+        (MRK, f"wget -qO {MRK} https://github.com/ositoMalvado/sksd/raw/main/script/SM/marking.py")
+    ]
+
+    for x, y in z:
+        if not Path(x).exists():
+            SyS(y)
+
+
+selection, civitai_key, hf_read_token = prevent_silly()
+if selection is None or civitai_key is None:
+    sys.exit()
+
+webui, sd = selection
+
+if not SRE.exists():
+    PythonPortable()
+
+clear_output()
+display(Image(url=IMG))
+
+CD(HOME)
+webui_misc()
+saving()
+key_inject(civitai_key, hf_read_token)
+marking(SRC, MARKED, webui)
+sys.path.append(str(STR))
+
+for scripts in [nenen, pantat, KANDANG, MRK]:
+    get_ipython().run_line_magic('run', str(scripts))
+
+from nenen88 import clone, say, download, tempe, pull # type: ignore
+webui_checker()

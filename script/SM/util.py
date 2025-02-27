@@ -89,7 +89,7 @@ def storage(line):
 def delete_everything(line):    
     main_output = widgets.Output()
     
-    ask = widgets.Label("Borrar Todo??")
+    ask = widgets.Label("Delete?")
     ask.add_class("del")
 
     yes = widgets.Button(description="Yes")
@@ -99,10 +99,11 @@ def delete_everything(line):
     no.add_class("save-button")
 
     button = widgets.HBox(
-        [yes, no], layout=widgets.Layout(
+        [no, yes], layout=widgets.Layout(
             display='flex',
             flex_flow='row',
             align_items='center',
+            top='35px',
             justify_content='space-around',
             width='100%'))
 
@@ -114,7 +115,7 @@ def delete_everything(line):
             flex_flow='column',
             align_items='center',
             justify_content='space-around',
-            padding='20px'))
+            padding='10px'))
     boxs.add_class("boxs")
 
     def load_css(css):
@@ -138,19 +139,9 @@ def delete_everything(line):
                 del os.environ['LD_PRELOAD']
 
             folder_list = [
-                'tmp/*',
-                'tmp',
-                'asd',
-                'forge',
-                'ComfyUI',
-                '.cache/*',
-                '.config/*',
-                '.ssh',
-                '.zrok',
-                '.sagemaker',
-                '.nv',
-                '.conda',
-                '.ipython/profile_default/startup'
+                'A1111', 'Forge', 'ReForge', 'ComfyUI', 'SwarmUI', 'SDTrainer', 'FaceFusion',
+                'tmp/*', 'tmp', '.cache/*', '.config/*', '.ssh', '.zrok', '.ngrok', '.sagemaker',
+                '.conda/*', '.conda', '.ipython/profile_default/startup/*'
             ]
 
             cmd_list = [
@@ -325,17 +316,17 @@ def change_key(line):
     key_file = src_src / "api-key.json"
 
     main_output = widgets.Output()
-    save_button = widgets.Button(description="Guardar")
+    save_button = widgets.Button(description="Save")
     save_button.add_class("save")
 
-    cancel_button = widgets.Button(description="Cancelar")
+    cancel_button = widgets.Button(description="Cancel")
     cancel_button.add_class("cancel")
 
-    new_civitai_key = widgets.Text(placeholder='Nuevo Civitai API KEY')
+    new_civitai_key = widgets.Text(placeholder='New Civitai API KEY')
     new_civitai_key.add_class("key-input")
 
     new_hf_token = widgets.Text(
-        placeholder='New Huggingface READ \Token (opcional\)',
+        placeholder='New Huggingface READ Token (optional)',
         layout=widgets.Layout(left='6px', width='340px'))
     new_hf_token.add_class("key-hf")
     
@@ -435,11 +426,11 @@ def change_key(line):
 
             with main_output:
                 if not civitai_key:
-                    print("Por favor ingresa tu CivitAI API Key")
+                    print("Please enter your CivitAI API Key")
                     return
 
                 if len(civitai_key) < 32:
-                    print("API key debe tener 32 caracteres")
+                    print("API key must be at least 32 characters long")
                     return
 
                 civitai_ke = {"civitai-api-key": civitai_key}
@@ -462,7 +453,7 @@ def change_key(line):
 
                 main_output.clear_output(wait=True)
                 time.sleep(3)
-                say("Listo")
+                say("Done")
 
         def cancel_key(b):
             new_civitai_key.value = ''
@@ -471,7 +462,7 @@ def change_key(line):
             with main_output:
                 input_widget.close()
                 main_output.clear_output(wait=True)
-                say("^ Cancelado")
+                say("^ Canceled")
 
         save_button.on_click(save_key)
         cancel_button.on_click(cancel_key)
@@ -505,7 +496,7 @@ def zrok_register(line):
     exit_button = widgets.Button(description="Exit", layout=widgets.Layout(left= '45%'))
     exit_button.add_class("zrok-btn")
 
-    email_input = widgets.Text(placeholder='Ingresa un Correo', layout=widgets.Layout(width= '75%'))
+    email_input = widgets.Text(placeholder='Enter Your Valid Email Address', layout=widgets.Layout(width= '75%'))
     email_input.add_class("email-input")
 
     zrok_button = widgets.HBox([register_button, exit_button], layout=widgets.Layout(
@@ -528,7 +519,7 @@ def zrok_register(line):
             return
 
         zrok_bin.mkdir(parents=True, exist_ok=True)
-        zrok_url = "https://github.com/openziti/zrok/releases/download/v0.4.32/zrok_0.4.32_linux_amd64.tar.gz"
+        zrok_url = "https://github.com/openziti/zrok/releases/download/v0.4.44/zrok_0.4.44_linux_amd64.tar.gz"
         zrok_tar = zrok_bin / Path(zrok_url).name
 
         get_ipython().system(f"curl -sLo {zrok_tar} {zrok_url}")
