@@ -127,7 +127,7 @@ def PythonPortable():
             'rm -f /usr/lib/python3.10/sitecustomize.py'
         ]: SyS(f'{cmd}>/dev/null 2>&1')
     else:
-        print(f'\n{AR} installing Python...')
+        print(f'\n{AR} Instalando Python...')
 
     SyS(pv)
     Path(ROOT / fn).unlink()

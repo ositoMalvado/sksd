@@ -83,9 +83,9 @@ def install_requirements(requirements_file_path):
                             print(f"Instalando '{package_name} {required_version}'")
                             subprocess.run([sys.executable, "-m", "pip", "install", "-q", f"{package_name}{comparison_operator}{required_version}"], check=True)
                         elif action == "uninstall":
-                            print(f"Uninstalling '{package_name}'")
+                            print(f"UnInstalando '{package_name}'")
                             subprocess.run([sys.executable, "-m", "pip", "uninstall", "-y", package_name], check=True)
-                            print(f"Re-installing '{package_name} {required_version}'")
+                            print(f"Re-Instalando '{package_name} {required_version}'")
                             subprocess.run([sys.executable, "-m", "pip", "install", "-q", f"{package_name}{comparison_operator}{required_version}"], check=True)
                         else:
                             pass

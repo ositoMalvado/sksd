@@ -47,9 +47,9 @@ def check_ffmpeg():
     i = get_ipython().getoutput('conda list ffmpeg')
     if not any('ffmpeg' in l for l in i):
         c = [
-            ('mamba install -y ffmpeg curl', '\ninstalling ffmpeg...'),
-            ('mamba install -y cuda-runtime=12.4.1', 'installing cuda-runtime=12.4.1...'),
-            ('mamba install -y cudnn=9.2.1.18', 'installing cudnn=9.2.1.18...'),
+            ('mamba install -y ffmpeg curl', '\nInstalando ffmpeg...'),
+            ('mamba install -y cuda-runtime=12.4.1', 'Instalando cuda-runtime=12.4.1...'),
+            ('mamba install -y cudnn=9.2.1.18', 'Instalando cudnn=9.2.1.18...'),
             ('conda clean -y --all', None)
         ]
 
