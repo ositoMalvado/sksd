@@ -126,7 +126,7 @@ def PythonPortable():
     PKG = str(SRE / 'lib/python3.10/site-packages')
     SyS('sudo apt-get -qq -y install aria2 pv lz4 >/dev/null 2>&1')
 
-    url = 'https://huggingface.co/gutris1/webui/resolve/main/env/python310-torch251-cu121.tar.lz4'
+    url = 'https://huggingface.co/mordecaaiiaart/osmal/resolve/main/python310-torch251-cu121.tar.lz4'
     fn = Path(url).name
 
     aria = f'aria2c --console-log-level=error --stderr=true -c -x16 -s16 -k1M -j5 {url} -o {fn}'

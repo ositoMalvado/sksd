@@ -1,1 +1,8 @@
 replacer.txt
+utils/
+do.pwsh
+LICENSE
+replacer.txt
+pyproject.toml
+.venv/
+huggingco.py
