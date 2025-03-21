@@ -88,7 +88,7 @@ def strip_(url):
                     page = f"https://civitai.com/models/{model_id}?modelVersionId={version_id}"
                     print(f"  -> {page}")
                 
-                print("  El modelo recién salió, todavía no se puede descargar para descargar.\n")
+                print("  The model is in early access and requires payment para descargar.\n")
                 return None
 
             download_url = data["downloadUrl"] if "downloadUrl" in data else data["modelVersions"][0]["downloadUrl"]

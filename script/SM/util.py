@@ -92,7 +92,7 @@ def delete_everything(line):
     ask = widgets.Label("Delete?")
     ask.add_class("del")
 
-    yes = widgets.Button(description="Yes")
+    yes = widgets.Button(description="Si")
     yes.add_class("save-button")
 
     no = widgets.Button(description="No")
