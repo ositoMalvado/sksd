@@ -89,7 +89,7 @@ def storage(line):
 def delete_everything(line):    
     main_output = widgets.Output()
     
-    ask = widgets.Label("Delete?")
+    ask = widgets.Label("Eliminar?")
     ask.add_class("del")
 
     yes = widgets.Button(description="Si")
