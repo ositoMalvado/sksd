@@ -11,7 +11,7 @@ from nenen88 import tempe, say, download
 HOME = Path.home()
 SRC = HOME / '.ositoMalvado'
 MARK = SRC / 'marking.json'
-IMG = SRC / 'loading.png'
+IMG = SRC / 'loading.apng'
 
 tmp = Path('/tmp')
 cwd = Path.cwd()
@@ -41,7 +41,7 @@ def load_config():
         need_space = 14 * 1024**3
         vnv = vnv_SDT
     else:
-        url = 'https://huggingface.co/mordecaaiiaart/osmal/resolve/main/venv-torch251-cu121-SSL.tar.lz4'
+        url = 'https://huggingface.co/gutris1/webui/resolve/main/env/venv-torch251-cu121-SSL.tar.lz4'
         need_space = 14 * 1024**3
         vnv = vnv_D
 
